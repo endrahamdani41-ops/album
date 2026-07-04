@@ -1791,99 +1791,72 @@ async function exportPDF() {
         return;
     }
 
-    if (typeof html2canvas === 'undefined') {
-        alert('❌ Library html2canvas tidak dimuat. Periksa koneksi internet Anda.');
-        return;
+    // PERINGATAN jika dibuka via file://
+    if (window.location.protocol === 'file:') {
+        alert('⚠️ PERINGATAN: Anda membuka file secara lokal (file://).\n\nUntuk hasil PDF terbaik, gunakan GitHub Pages atau Live Server.\n\nKlik OK untuk melanjutkan (foto mungkin tidak muncul).');
     }
 
-    const siswaList = DATA_SISWA[currentKelas.kode];
-    let fotoTerisi = 0;
-
-    siswaList.forEach(siswa => {
-        const card = document.querySelector(`.student-card[data-id="${siswa.id}"]`);
-        if (card) {
-            const img = card.querySelector('.photo-frame img');
-            if (img && img.src && !img.src.includes('placeholder') && img.src !== window.location.href && !img.src.includes('foto_siswa/')) {
-                fotoTerisi++;
-            }
-        }
-    });
-
-    if (fotoTerisi < siswaList.length) {
-        const konfirmasi = confirm(
-            `⚠️ PERINGATAN EXPORT PDF\n\n` +
-            `Hanya ${fotoTerisi} dari ${siswaList.length} foto siswa yang sudah terisi.\n\n` +
-            `PDF akan tetap dibuat dengan placeholder untuk foto kosong.\n\n` +
-            `Lanjutkan?`
-        );
-        if (!konfirmasi) return;
-    }
-
-    const loading = document.getElementById('pdfLoading');
+    const loading = document.getElementById('pdfLoading') || createLoadingOverlay();
     const progressBar = document.getElementById('pdfProgressBar');
     let pdfContainer = null;
 
     try {
-        loading.classList.add('active');
-        progressBar.style.width = '10%';
-
+        loading.style.display = 'flex';
+        if (progressBar) progressBar.style.width = '10%';
+        
+        // Tunggu fonts dan resource
         await document.fonts.ready;
-        const images = document.querySelectorAll('img');
-        await Promise.all(Array.from(images).map(img => {
-            if (img.complete) return;
-            return new Promise(resolve => {
-                img.onload = resolve;
-                img.onerror = resolve;
-            });
-        }));
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
+        // Buat container untuk PDF
         pdfContainer = document.createElement('div');
         pdfContainer.id = 'pdf-temp-container';
         pdfContainer.style.cssText = `
             position: fixed;
-            top: 0;
-            left: 100vw;
+            top: -9999px;
+            left: -9999px;
             width: 1120px;
             background: #ffffff;
             font-family: 'Playfair Display', Georgia, serif;
             z-index: -9999;
-            opacity: 0.01;
-            pointer-events: none;
         `;
         document.body.appendChild(pdfContainer);
 
-        progressBar.style.width = '20%';
+        if (progressBar) progressBar.style.width = '20%';
 
-        const coverPage = document.createElement('div');
-        coverPage.style.cssText = `
-            width: 1120px;
-            height: 794px;
-            background: linear-gradient(135deg, #1e3a5f 0%, #0f1729 100%);
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            border: 8px solid #d4af37;
-            position: relative;
-            box-sizing: border-box;
+        // Helper untuk buat halaman
+        const createPage = (content, bg = '#ffffff') => {
+            const page = document.createElement('div');
+            page.style.cssText = `
+                width: 1120px;
+                height: 794px;
+                background: ${bg};
+                padding: 40px;
+                position: relative;
+                color: #1a1f2e;
+                box-sizing: border-box;
+            `;
+            page.innerHTML = content;
+            return page;
+        };
+
+        // COVER
+        const coverContent = `
+            <div style="text-align: center; margin-top: 150px;">
+                <h1 style="font-size: 64px; color: #e8b4a8; letter-spacing: 8px; margin-bottom: 30px; font-weight: 700;">ALBUM KENANGAN</h1>
+                <div style="width: 300px; height: 2px; background: #d4af37; margin: 30px auto;"></div>
+                <p style="font-size: 24px; color: #d0d5e0; letter-spacing: 3px;">SMP NEGERI 110 JAKARTA</p>
+                <p style="font-size: 24px; color: #d0d5e0; letter-spacing: 3px;">Tahun Ajaran 2025 / 2026</p>
+                <p style="font-size: 42px; color: #d4af37; margin-top: 40px; letter-spacing: 4px; font-weight: 700;">Kelas ${currentKelas.nama}</p>
+                <p style="font-size: 18px; color: #9ca5c2; margin-top: 60px; font-style: italic;">Kenangan hari ini, cerita indah untuk nanti</p>
+            </div>
         `;
-        coverPage.innerHTML = `
-            <div style="position: absolute; top: 30px; left: 30px; right: 30px; bottom: 30px; border: 2px solid rgba(212, 175, 55, 0.5);"></div>
-            <h1 style="font-size: 64px; color: #e8b4a8; letter-spacing: 8px; margin-bottom: 30px; font-weight: 700;">ALBUM KENANGAN</h1>
-            <div style="width: 300px; height: 2px; background: #d4af37; margin: 30px 0;"></div>
-            <p style="font-size: 24px; color: #d0d5e0; letter-spacing: 3px; margin: 15px 0;">SMP NEGERI 110 JAKARTA</p>
-            <p style="font-size: 24px; color: #d0d5e0; letter-spacing: 3px; margin: 15px 0;">Tahun Ajaran 2025 / 2026</p>
-            <p style="font-size: 42px; color: #d4af37; margin-top: 40px; letter-spacing: 4px; font-weight: 700;">Kelas ${currentKelas.nama}</p>
-            <p style="font-size: 18px; color: #9ca5c2; margin-top: 60px; font-style: italic;">Kenangan hari ini, cerita indah untuk nanti</p>
-        `;
-        pdfContainer.appendChild(coverPage);
+        pdfContainer.appendChild(createPage(coverContent, 'linear-gradient(135deg, #1e3a5f 0%, #0f1729 100%)'));
 
-        progressBar.style.width = '30%';
+        if (progressBar) progressBar.style.width = '30%';
 
+        // HALAMAN SISWA
+        const siswaList = DATA_SISWA[currentKelas.kode];
         const pages = [
             { title: 'DAFTAR MURID 1 - 6', siswa: siswaList.slice(0, 6), pageNum: 3 },
             { title: 'DAFTAR MURID 7 - 12', siswa: siswaList.slice(6, 12), pageNum: 4 },
@@ -1894,20 +1867,10 @@ async function exportPDF() {
         ];
 
         for (let i = 0; i < pages.length; i++) {
-            const page = document.createElement('div');
-            page.style.cssText = `
-                width: 1120px;
-                height: 794px;
-                background: #ffffff;
-                padding: 40px;
-                position: relative;
-                color: #1a1f2e;
-                box-sizing: border-box;
-            `;
-
+            const page = pages[i];
             let siswaHTML = '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;">';
 
-            pages[i].siswa.forEach(s => {
+            page.siswa.forEach(s => {
                 const card = document.querySelector(`.student-card[data-id="${s.id}"]`);
                 let nama = s.nama, ttl = s.ttl, kutipan = s.kutipan;
                 let fotoSrc = '';
@@ -1922,135 +1885,83 @@ async function exportPDF() {
                     if (bioEl) ttl = bioEl.textContent.trim();
                     if (quoteEl) kutipan = quoteEl.textContent.trim();
 
-                    if (imgEl && imgEl.src && !imgEl.src.includes('foto_siswa/') && imgEl.src !== window.location.href) {
+                    if (imgEl && imgEl.src && !imgEl.src.includes('foto_siswa/')) {
                         fotoSrc = konversiUrlDrive(imgEl.src);
                     }
                 }
 
-                const fotoHTML = fotoSrc
+                const fotoHTML = fotoSrc 
                     ? `<img src="${fotoSrc}" crossorigin="anonymous" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px; display: block;">`
                     : `<div style="width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 14px; font-weight: 600;">Foto ${String(s.id).padStart(2, '0')}</div>`;
 
                 siswaHTML += `
-                    <div style="text-align: center; background: #f8f9fa; padding: 12px; border-radius: 8px; border: 2px solid #e0e6f0; page-break-inside: avoid;">
+                    <div style="text-align: center; background: #f8f9fa; padding: 12px; border-radius: 8px; border: 2px solid #e0e6f0;">
                         <div style="width: 100%; height: 200px; margin-bottom: 8px; overflow: hidden; border-radius: 4px;">
                             ${fotoHTML}
                         </div>
-                        <div style="font-weight: 700; color: #1e3a5f; font-size: 14px; margin-bottom: 4px; min-height: 20px;">${nama}</div>
-                        <div style="font-size: 11px; color: #647092; margin-bottom: 4px; min-height: 14px;">${ttl}</div>
-                        <div style="font-size: 10px; color: #9ca5c2; font-style: italic; min-height: 14px;">${kutipan}</div>
+                        <div style="font-weight: 700; color: #1e3a5f; font-size: 14px; margin-bottom: 4px;">${nama}</div>
+                        <div style="font-size: 11px; color: #647092; margin-bottom: 4px;">${ttl}</div>
+                        <div style="font-size: 10px; color: #9ca5c2; font-style: italic;">${kutipan}</div>
                     </div>
                 `;
             });
             siswaHTML += '</div>';
 
-            page.innerHTML = `
-                <h2 style="font-size: 28px; text-align: center; color: #1e3a5f; margin: 0 0 15px 0; font-weight: 700; letter-spacing: 2px; border-bottom: 3px solid #d4af37; padding-bottom: 10px;">${pages[i].title}</h2>
+            const pageContent = `
+                <h2 style="font-size: 28px; text-align: center; color: #1e3a5f; margin: 0 0 15px 0; font-weight: 700; border-bottom: 3px solid #d4af37; padding-bottom: 10px;">${page.title}</h2>
                 ${siswaHTML}
-                <div style="position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); color: #9ca5c2; font-size: 13px;">- ${pages[i].pageNum} -</div>
+                <div style="position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); color: #9ca5c2; font-size: 13px;">- ${page.pageNum} -</div>
             `;
-            pdfContainer.appendChild(page);
-            progressBar.style.width = `${30 + (i + 1) * 8}%`;
+            pdfContainer.appendChild(createPage(pageContent));
+            
+            if (progressBar) progressBar.style.width = `${30 + (i + 1) * 8}%`;
         }
 
-        const closingPage = document.createElement('div');
-        closingPage.style.cssText = `
-            width: 1120px;
-            height: 794px;
-            background: linear-gradient(135deg, #1e3a5f 0%, #0f1729 100%);
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            border: 8px solid #d4af37;
-            position: relative;
-            box-sizing: border-box;
+        // PENUTUP
+        const closingContent = `
+            <div style="text-align: center; margin-top: 200px;">
+                <p style="font-size: 24px; font-style: italic; color: #d0d5e0; max-width: 800px; line-height: 1.8; margin: 0 auto;">
+                    "Kenangan ini akan selalu tersimpan rapi di hati. Sampai jumpa di jalan kesuksesan masing-masing."
+                </p>
+                <p style="font-size: 32px; font-weight: 700; color: #ffffff; margin-top: 40px; letter-spacing: 3px;">— Kelas ${currentKelas.nama} —</p>
+                <p style="font-size: 20px; color: #9ca5c2; margin-top: 20px;">Tahun 2026</p>
+            </div>
         `;
-        closingPage.innerHTML = `
-            <div style="position: absolute; top: 30px; left: 30px; right: 30px; bottom: 30px; border: 2px solid rgba(212, 175, 55, 0.5);"></div>
-            <p style="font-size: 24px; font-style: italic; color: #d0d5e0; max-width: 800px; line-height: 1.8;">
-                "Kenangan ini akan selalu tersimpan rapi di hati. Sampai jumpa di jalan kesuksesan masing-masing."
-            </p>
-            <p style="font-size: 32px; font-weight: 700; color: #ffffff; margin-top: 40px; letter-spacing: 3px;">— Kelas ${currentKelas.nama} —</p>
-            <p style="font-size: 20px; color: #9ca5c2; margin-top: 20px;">Tahun 2026</p>
-        `;
-        pdfContainer.appendChild(closingPage);
+        pdfContainer.appendChild(createPage(closingContent, 'linear-gradient(135deg, #1e3a5f 0%, #0f1729 100%)'));
 
-        progressBar.style.width = '80%';
+        if (progressBar) progressBar.style.width = '80%';
 
-        // PRELOAD SEMUA GAMBAR DI CONTAINER PDF
-        const imgElements = pdfContainer.querySelectorAll('img');
-        console.log(`⏳ Preloading ${imgElements.length} gambar...`);
+        // Tunggu gambar load
+        await new Promise(resolve => setTimeout(resolve, 2000));
 
-        await Promise.all(Array.from(imgElements).map((img, idx) => {
-            return new Promise((resolve) => {
-                if (img.complete && img.naturalWidth > 0) {
-                    console.log(`✅ Gambar ${idx + 1} sudah loaded`);
-                    resolve();
-                    return;
-                }
+        if (progressBar) progressBar.style.width = '85%';
 
-                const timeout = setTimeout(() => {
-                    console.warn(`⚠️ Gambar ${idx + 1} timeout: ${img.src}`);
-                    resolve();
-                }, 10000);
-
-                img.onload = () => {
-                    clearTimeout(timeout);
-                    console.log(`✅ Gambar ${idx + 1} berhasil dimuat`);
-                    resolve();
-                };
-
-                img.onerror = () => {
-                    clearTimeout(timeout);
-                    console.warn(`❌ Gambar ${idx + 1} gagal: ${img.src}`);
-                    const parent = img.parentElement;
-                    if (parent) {
-                        parent.innerHTML = `<div style="width: 100%; height: 100%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 12px; font-weight: 600; text-align: center; padding: 10px;">Foto Tidak Tersedia</div>`;
-                    }
-                    resolve();
-                };
-
-                const currentSrc = img.src;
-                img.src = currentSrc + (currentSrc.includes('?') ? '&' : '?') + 't=' + Date.now();
-            });
-        }));
-
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        console.log('✅ Semua gambar selesai dipreload');
-
-        progressBar.style.width = '85%';
-
+        // Capture dengan html2canvas
         const canvasList = [];
         const children = pdfContainer.children;
 
         for (let i = 0; i < children.length; i++) {
-            const canvas = await html2canvas(children[i], {
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
-                logging: false,
-                backgroundColor: '#ffffff',
-                width: 1120,
-                height: 794,
-                windowWidth: 1120,
-                windowHeight: 794,
-                imageTimeout: 15000,
-                removeContainer: true,
-                foreignObjectRendering: true,
-                onclone: function(clonedDoc) {
-                    clonedDoc.querySelectorAll('img').forEach(img => {
-                        img.setAttribute('crossorigin', 'anonymous');
-                    });
-                }
-            });
-            canvasList.push(canvas);
-            progressBar.style.width = `${85 + (i + 1) * 2}%`;
+            try {
+                const canvas = await html2canvas(children[i], {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    logging: false,
+                    backgroundColor: '#ffffff',
+                    width: 1120,
+                    height: 794,
+                    imageTimeout: 15000
+                });
+                canvasList.push(canvas);
+            } catch (err) {
+                console.error('Error capture halaman:', err);
+            }
+            
+            if (progressBar) progressBar.style.width = `${85 + (i + 1) * 2}%`;
         }
 
-        const jsPDF = window.jspdf.jsPDF || window.jspdf;
+        // Buat PDF
+        const { jsPDF } = window.jspdf;
         const pdf = new jsPDF({
             orientation: 'landscape',
             unit: 'px',
@@ -2066,14 +1977,14 @@ async function exportPDF() {
 
         pdf.save(`Album_Kenangan_${currentKelas.nama}_2026.pdf`);
 
-        progressBar.style.width = '100%';
+        if (progressBar) progressBar.style.width = '100%';
 
         setTimeout(() => {
             if (pdfContainer && pdfContainer.parentNode) {
                 pdfContainer.parentNode.removeChild(pdfContainer);
             }
-            loading.classList.remove('active');
-            alert('✅ PDF berhasil diekspor!\n\nFile: Album_Kenangan_' + currentKelas.nama + '_2026.pdf');
+            loading.style.display = 'none';
+            alert('✅ PDF berhasil diekspor!');
         }, 500);
 
     } catch (err) {
@@ -2081,11 +1992,38 @@ async function exportPDF() {
         if (pdfContainer && pdfContainer.parentNode) {
             pdfContainer.parentNode.removeChild(pdfContainer);
         }
-        loading.classList.remove('active');
+        loading.style.display = 'none';
         alert('❌ Gagal mengekspor PDF\n\nError: ' + err.message);
     }
 }
 
+// Helper untuk membuat loading overlay jika belum ada
+function createLoadingOverlay() {
+    const overlay = document.createElement('div');
+    overlay.id = 'pdfLoading';
+    overlay.style.cssText = `
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.9);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        color: white;
+    `;
+    overlay.innerHTML = `
+        <div style="width: 60px; height: 60px; border: 4px solid rgba(212,175,55,0.3); border-top-color: #d4af37; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;"></div>
+        <div style="font-size: 18px; font-family: 'Playfair Display', serif;">Mengekspor PDF...</div>
+        <div style="margin-top: 15px; width: 200px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden;">
+            <div id="pdfProgressBar" style="height: 100%; background: #d4af37; width: 0%; transition: width 0.3s;"></div>
+        </div>
+        <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+    `;
+    document.body.appendChild(overlay);
+    return overlay;
+}
+    
 // =================================================================
 // ===== EVENT LISTENERS =====
 // =================================================================
