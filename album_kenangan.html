@@ -1782,6 +1782,14 @@ function tutupZoomFoto() {
     document.body.style.overflow = '';
 }
 
+
+
+
+
+
+
+
+
 // =================================================================
 // ===== FITUR: EXPORT PDF =====
 // =================================================================
@@ -1792,11 +1800,13 @@ async function exportPDF() {
         return;
     }
 
-    // Cek apakah dibuka via file://
+    // PERINGATAN jika dibuka via file://
     if (window.location.protocol === 'file:') {
-        alert('⚠️ PERINGATAN: Anda membuka file secara lokal.\n\nUntuk hasil terbaik, gunakan GitHub Pages.\n\nKlik OK untuk melanjutkan.');
+        const lanjut = confirm('⚠️ ANDA MEMBUKA FILE LOKAL (file://)\n\nFoto dari Google Drive TIDAK AKAN MUNCUL karena pembatasan keamanan browser.\n\nSolusi: Upload ke GitHub Pages atau gunakan Live Server.\n\nKlik OK untuk lanjut (foto akan kosong), Cancel untuk batal.');
+        if (!lanjut) return;
     }
 
+    // Loading overlay
     let loading = document.getElementById('pdfLoading');
     if (!loading) {
         loading = document.createElement('div');
@@ -1820,15 +1830,16 @@ async function exportPDF() {
 
     const PAGE_W = 1120;
     const PAGE_H = 794;
-    let pdfContainer = null;
+    let renderContainer = null;
 
     try {
         await document.fonts.ready;
         await new Promise(r => setTimeout(r, 500));
 
-        pdfContainer = document.createElement('div');
-        pdfContainer.id = 'pdf-temp-container';
-        pdfContainer.style.cssText = `
+        // ✅ CONTAINER DI left: 100vw (bukan -10000px) - TERBUKTI BERHASIL
+        renderContainer = document.createElement('div');
+        renderContainer.id = 'pdf-render-container';
+        renderContainer.style.cssText = `
             position: fixed;
             top: 0;
             left: 100vw;
@@ -1838,9 +1849,10 @@ async function exportPDF() {
             opacity: 0.01;
             pointer-events: none;
         `;
-        document.body.appendChild(pdfContainer);
+        document.body.appendChild(renderContainer);
 
-        const addPage = (content, bgColor = '#ffffff') => {
+        // Helper: buat halaman
+        const createPage = (content, bgColor = '#ffffff') => {
             const page = document.createElement('div');
             page.style.cssText = `
                 width: ${PAGE_W}px;
@@ -1853,11 +1865,11 @@ async function exportPDF() {
                 font-family: 'Playfair Display', Georgia, serif;
             `;
             page.innerHTML = content;
-            pdfContainer.appendChild(page);
             return page;
         };
 
-        const makeCard = (siswa) => {
+        // Helper: buat card siswa - FOTO RASIO 4:5 (PORTRAIT)
+        const createStudentCard = (siswa) => {
             const card = document.querySelector(`.student-card[data-id="${siswa.id}"]`);
             let nama = siswa.nama, ttl = siswa.ttl, kutipan = siswa.kutipan;
             let fotoSrc = '';
@@ -1877,14 +1889,11 @@ async function exportPDF() {
                 }
             }
 
-            // Jika ada foto, gunakan img tag. Jika tidak, gunakan placeholder
-            let fotoHTML;
-            if (fotoSrc) {
-                fotoHTML = `<img src="${fotoSrc}" crossorigin="anonymous" style="width:160px;height:200px;object-fit:cover;border-radius:2px;display:block;margin:0 auto;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="width:160px;height:200px;background:#f0f0f0;border-radius:2px;display:none;align-items:center;justify-content:center;color:#999;font-size:12px;margin:0 auto;">Foto Gagal</div>`;
-            } else {
-                fotoHTML = `<div style="width:160px;height:200px;background:#f0f0f0;border-radius:2px;display:flex;align-items:center;justify-content:center;color:#999;font-size:12px;margin:0 auto;">Belum Ada Foto</div>`;
-            }
+            // ✅ FOTO 160x200px = RASIO 4:5 (PORTRAIT, TIDAK GEPENG)
+            const fotoHTML = fotoSrc 
+                ? `<img src="${fotoSrc}" crossorigin="anonymous" style="width:160px;height:200px;object-fit:cover;border-radius:2px;display:block;margin:0 auto;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                   <div style="width:160px;height:200px;background:#f0f0f0;border-radius:2px;display:none;align-items:center;justify-content:center;color:#999;font-size:11px;margin:0 auto;">Foto Gagal</div>`
+                : `<div style="width:160px;height:200px;background:#f0f0f0;border-radius:2px;display:flex;align-items:center;justify-content:center;color:#999;font-size:11px;margin:0 auto;">Belum Ada Foto</div>`;
 
             return `
                 <div style="width:240px;display:inline-block;vertical-align:top;text-align:center;margin:8px 20px;">
@@ -1898,11 +1907,11 @@ async function exportPDF() {
             `;
         };
 
-        // COVER
+        // ============ HALAMAN 1: COVER ============
         if (progressBar) progressBar.style.width = '10%';
         if (loadingText) loadingText.innerText = 'Membuat cover...';
 
-        addPage(`
+        renderContainer.appendChild(createPage(`
             <div style="text-align:center;margin-top:120px;">
                 <div style="border:3px solid #d4af37;padding:50px 40px;margin:0 40px;">
                     <h1 style="font-size:56px;color:#e8b4a8;letter-spacing:6px;margin-bottom:20px;font-weight:700;">ALBUM KENANGAN</h1>
@@ -1913,9 +1922,9 @@ async function exportPDF() {
                     <p style="font-size:16px;color:#9ca5c2;margin-top:50px;font-style:italic;">Kenangan hari ini, cerita indah untuk nanti</p>
                 </div>
             </div>
-        `, '#0a1628');
+        `, '#0a1628'));
 
-        // DAFTAR MURID
+        // ============ HALAMAN 2-7: DAFTAR MURID ============
         const siswaList = DATA_SISWA[currentKelas.kode];
         const pages = [
             { title: 'DAFTAR MURID 1 - 6', siswa: siswaList.slice(0, 6), pageNum: 3 },
@@ -1931,20 +1940,20 @@ async function exportPDF() {
             if (loadingText) loadingText.innerText = `Halaman ${p.pageNum}...`;
             
             let cards = '<div style="text-align:center;margin-top:15px;">';
-            p.siswa.forEach(s => { cards += makeCard(s); });
+            p.siswa.forEach(s => { cards += createStudentCard(s); });
             cards += '</div>';
 
-            addPage(`
+            renderContainer.appendChild(createPage(`
                 <h2 style="font-size:26px;text-align:center;color:#1e3a5f;margin:0 0 10px 0;font-weight:700;letter-spacing:2px;border-bottom:3px solid #d4af37;padding-bottom:10px;">${p.title}</h2>
                 ${cards}
                 <div style="position:absolute;bottom:25px;left:50%;transform:translateX(-50%);color:#9ca5c2;font-size:14px;">- ${p.pageNum} -</div>
-            `);
+            `));
             
             if (progressBar) progressBar.style.width = `${10 + (i + 1) * 10}%`;
         }
 
-        // PENUTUP
-        addPage(`
+        // ============ HALAMAN 8: PENUTUP ============
+        renderContainer.appendChild(createPage(`
             <div style="text-align:center;margin-top:200px;">
                 <div style="border:3px solid #d4af37;padding:50px 40px;margin:0 40px;">
                     <p style="font-size:22px;font-style:italic;color:#d0d5e0;max-width:700px;line-height:1.8;margin:0 auto;">
@@ -1954,64 +1963,61 @@ async function exportPDF() {
                     <p style="font-size:18px;color:#9ca5c2;margin-top:20px;">Tahun 2026</p>
                 </div>
             </div>
-        `, '#0a1628');
+        `, '#0a1628'));
 
         if (progressBar) progressBar.style.width = '75%';
         if (loadingText) loadingText.innerText = 'Memuat gambar...';
 
-        // PRELOAD GAMBAR - LEBIH AGRESIF
-        const images = pdfContainer.querySelectorAll('img');
+        // ✅ PRELOAD AGRESIF DENGAN LOGGING
+        const images = renderContainer.querySelectorAll('img');
         console.log(`⏳ Preloading ${images.length} gambar...`);
 
-        let loadedCount = 0;
-        let failedCount = 0;
+        let loadedCount = 0, failedCount = 0;
 
         await Promise.all(Array.from(images).map((img, idx) => {
             return new Promise(resolve => {
-                // Jika sudah loaded
                 if (img.complete && img.naturalWidth > 0) {
-                    console.log(`✅ Gambar ${idx+1} sudah loaded: ${img.src.substring(0, 50)}...`);
+                    console.log(`✅ Gambar ${idx+1} sudah loaded`);
                     loadedCount++;
                     resolve();
                     return;
                 }
 
                 const timeout = setTimeout(() => {
-                    console.warn(`⚠️ Gambar ${idx+1} timeout setelah 15 detik`);
+                    console.warn(`⚠️ Gambar ${idx+1} timeout: ${img.src.substring(0, 60)}...`);
                     failedCount++;
                     resolve();
                 }, 15000);
 
                 img.onload = () => {
                     clearTimeout(timeout);
-                    console.log(`✅ Gambar ${idx+1} berhasil dimuat (${img.naturalWidth}x${img.naturalHeight})`);
+                    console.log(`✅ Gambar ${idx+1} berhasil (${img.naturalWidth}x${img.naturalHeight})`);
                     loadedCount++;
                     resolve();
                 };
 
                 img.onerror = () => {
                     clearTimeout(timeout);
-                    console.error(`❌ Gambar ${idx+1} GAGAL load: ${img.src}`);
+                    console.error(`❌ Gambar ${idx+1} GAGAL: ${img.src}`);
                     failedCount++;
                     resolve();
                 };
 
-                // Force reload dengan timestamp
+                // Force reload dengan timestamp anti-cache
                 const src = img.src;
                 img.src = src + (src.includes('?') ? '&' : '?') + 't=' + Date.now() + '_' + idx;
             });
         }));
 
         console.log(`📊 Preload selesai: ${loadedCount} berhasil, ${failedCount} gagal`);
-
-        await new Promise(r => setTimeout(r, 2000));
+        await new Promise(r => setTimeout(r, 1500));
 
         if (progressBar) progressBar.style.width = '82%';
         if (loadingText) loadingText.innerText = 'Render halaman...';
 
-        // RENDER
+        // RENDER PER HALAMAN
         const canvasList = [];
-        const pageEls = pdfContainer.children;
+        const pageEls = renderContainer.children;
 
         for (let i = 0; i < pageEls.length; i++) {
             console.log(`📸 Render halaman ${i+1}/${pageEls.length}`);
@@ -2036,14 +2042,16 @@ async function exportPDF() {
             if (progressBar) progressBar.style.width = `${82 + (i+1) * 2}%`;
         }
 
-        if (pdfContainer && pdfContainer.parentNode) {
-            pdfContainer.parentNode.removeChild(pdfContainer);
-            pdfContainer = null;
+        // Hapus container
+        if (renderContainer && renderContainer.parentNode) {
+            renderContainer.parentNode.removeChild(renderContainer);
+            renderContainer = null;
         }
 
         if (progressBar) progressBar.style.width = '95%';
         if (loadingText) loadingText.innerText = 'Menyimpan PDF...';
 
+        // Buat PDF
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF({
             orientation: 'landscape',
@@ -2064,19 +2072,18 @@ async function exportPDF() {
 
         setTimeout(() => {
             loading.style.display = 'none';
-            alert(`✅ PDF berhasil diekspor!\n\n${loadedCount} foto berhasil dimuat\n${failedCount} foto gagal dimuat`);
+            alert(`✅ PDF berhasil!\n\n${loadedCount} foto dimuat\n${failedCount} foto gagal`);
         }, 500);
 
     } catch (err) {
         console.error('Error:', err);
-        if (pdfContainer && pdfContainer.parentNode) {
-            pdfContainer.parentNode.removeChild(pdfContainer);
+        if (renderContainer && renderContainer.parentNode) {
+            renderContainer.parentNode.removeChild(renderContainer);
         }
         loading.style.display = 'none';
         alert('❌ Gagal: ' + err.message);
     }
 }
-
 
 
 
