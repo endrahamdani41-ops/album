@@ -2,7 +2,8 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Album Kenangan - SMP Negeri 110 Jakarta</title>
     
     <!-- LIBRARY WAJIB -->
@@ -1274,6 +1275,420 @@
             .grid-2 { grid-template-columns: 1fr 1fr !important; gap: 15px !important; }
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
         }
+		
+		/* ===== RESPONSIVE MOBILE ===== */
+@media (max-width: 768px) {
+    /* Landing Page */
+    .landing-title {
+        font-size: 28px;
+        letter-spacing: 2px;
+    }
+    
+    .landing-subtitle {
+        font-size: 16px;
+    }
+    
+    .landing-school {
+        font-size: 18px;
+    }
+    
+    /* Book Layout - Single Page di Mobile */
+    .book {
+        --book-width: 100vw;
+        --book-height: calc(100vh - 100px);
+        max-width: 100%;
+    }
+    
+    .page {
+        width: 100% !important;
+        left: 0 !important;
+        position: relative !important;
+    }
+    
+    .page-cover {
+        width: 100% !important;
+        right: 0 !important;
+    }
+    
+    .page-left, .page-right {
+        width: 100% !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
+    }
+    
+    /* Hide spiral binding di mobile */
+    .spiral-binding {
+        display: none;
+    }
+    
+    /* Navigation Buttons - Lebih besar untuk touch */
+    .nav-btn {
+        width: 56px;
+        height: 56px;
+        font-size: 24px;
+    }
+    
+    #prevBtn { left: 10px; }
+    #nextBtn { right: 10px; }
+    #backToLanding { top: 10px; left: 10px; }
+    #coverBtn { top: 10px; }
+    
+    .feature-buttons {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .feature-btn {
+        width: 44px;
+        height: 44px;
+    }
+    
+    /* Content Padding */
+    .page-content {
+        padding: 20px 15px !important;
+    }
+    
+    h2 {
+        font-size: 20px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    /* Student Grid - 2 kolom di mobile */
+    .student-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+        height: auto !important;
+    }
+    
+    .student-card {
+        min-height: 220px;
+    }
+    
+    .photo-frame {
+        height: 120px !important;
+    }
+    
+    .student-name {
+        font-size: 11px;
+    }
+    
+    .student-bio, .student-quote {
+        font-size: 9px;
+    }
+    
+    /* Cover Content */
+    .cover-title {
+        font-size: 32px !important;
+        letter-spacing: 4px;
+    }
+    
+    .cover-class {
+        font-size: 24px !important;
+    }
+    
+    .cover-sub {
+        font-size: 14px !important;
+    }
+    
+    .cover-note {
+        font-size: 13px !important;
+    }
+    
+    /* Daftar Isi */
+    .toc-item {
+        padding: 12px 10px !important;
+    }
+    
+    .toc-number {
+        font-size: 24px !important;
+        min-width: 80px;
+    }
+    
+    .toc-title {
+        font-size: 14px !important;
+    }
+    
+    /* Grid 2 kolom untuk section */
+    .grid-2 {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Foto Wali Kelas */
+    .foto-wali-grid-final {
+        padding: 10px 15px !important;
+    }
+    
+    .foto-item-final, .foto-placeholder-final {
+        max-width: 100% !important;
+    }
+    
+    .btn-upload-wali {
+        top: 30px;
+        right: 15px;
+    }
+    
+    /* PDF Export Card */
+    .createStudentCard {
+        height: 260px !important;
+    }
+    
+    /* Hide reflection di mobile */
+    .book-reflection {
+        display: none;
+    }
+    
+    /* Floral corners lebih kecil */
+    .floral-corner {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .floral-corner-tl { top: 10px; left: 10px; }
+    .floral-corner-tr { top: 10px; right: 10px; }
+    .floral-corner-bl { bottom: 10px; left: 10px; }
+    .floral-corner-br { bottom: 10px; right: 10px; }
+}
+
+/* Mobile Kecil (Portrait) */
+@media (max-width: 480px) {
+    .landing-title {
+        font-size: 24px;
+    }
+    
+    .book {
+        --book-height: calc(100vh - 80px);
+    }
+    
+    .page-content {
+        padding: 15px 10px !important;
+    }
+    
+    .student-grid {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+    }
+    
+    .student-card {
+        min-height: 200px;
+    }
+    
+    .photo-frame {
+        height: 150px !important;
+    }
+    
+    h2 {
+        font-size: 18px !important;
+    }
+    
+    .cover-title {
+        font-size: 28px !important;
+    }
+    
+    .toc-number {
+        font-size: 20px !important;
+    }
+    
+    .toc-title {
+        font-size: 12px !important;
+    }
+    
+    /* Navigation lebih kecil */
+    .nav-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+    }
+}
+
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .book {
+        --book-height: 100vh;
+    }
+    
+    .page-content {
+        padding: 15px !important;
+        overflow-y: auto;
+    }
+    
+    .student-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+/* Touch Optimization */
+@media (hover: none) and (pointer: coarse) {
+    .toc-item:hover {
+        transform: none;
+    }
+    
+    .kelas-card:hover {
+        transform: none;
+    }
+    
+    .nav-btn:active {
+        transform: scale(0.95);
+    }
+    
+    .feature-btn:active {
+        transform: scale(0.95);
+    }
+}
+	
+/* ===== MOBILE VERTICAL SCROLL MODE ===== */
+@media (max-width: 768px) {
+    /* Book wrapper jadi scrollable */
+    .book-wrapper {
+        overflow-y: auto;
+        height: 100vh;
+        align-items: flex-start;
+    }
+    
+    .book {
+        --book-width: 100vw;
+        --book-height: auto;
+        perspective: none !important;
+        transform-style: flat !important;
+    }
+    
+    /* Semua halaman jadi block dan tampil */
+    .page {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 100vh;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        display: block !important;
+        margin-bottom: 0;
+        page-break-after: always;
+    }
+    
+    .page-cover {
+        position: relative !important;
+        width: 100% !important;
+        height: 100vh;
+        transform: none !important;
+        z-index: 1;
+    }
+    
+    .page-left, .page-right {
+        position: relative !important;
+        width: 100% !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
+    }
+    
+    /* Content padding mobile */
+    .page-content {
+        padding: 60px 15px 40px 15px !important;
+        position: relative !important;
+        display: block !important;
+        height: auto !important;
+        min-height: calc(100vh - 100px);
+    }
+    
+    /* Hide navigation di mobile (pakai scroll) */
+    .nav-container {
+        display: none !important;
+    }
+    
+    /* Spiral binding hide */
+    .spiral-binding {
+        display: none;
+    }
+    
+    /* Reflection hide */
+    .book-reflection {
+        display: none;
+    }
+    
+    /* Grid siswa 2 kolom di mobile */
+    .student-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        height: auto !important;
+    }
+    
+    .student-card {
+        height: auto !important;
+        min-height: 200px;
+    }
+    
+    .photo-frame {
+        height: 140px !important;
+    }
+    
+    /* Cover content adjust */
+    .cover-front {
+        padding: 30px 20px !important;
+    }
+    
+    .cover-title {
+        font-size: 36px !important;
+    }
+    
+    .floral-corner {
+        width: 80px;
+        height: 80px;
+    }
+    
+    /* Feature buttons tetap tampil */
+    .feature-buttons {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+    }
+    
+    /* Daftar isi full width */
+    .toc-item {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 5px;
+    }
+    
+    .toc-number {
+        font-size: 20px;
+        min-width: auto;
+        text-align: left;
+    }
+    
+    /* Grid 2 jadi 1 kolom di mobile */
+    .grid-2 {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Foto wali kelas */
+    .foto-wali-grid-final {
+        padding: 10px !important;
+    }
+    
+    .foto-item-final, .foto-placeholder-final {
+        max-width: 100% !important;
+    }
+}
+
+/* Mobile kecil - 1 kolom */
+@media (max-width: 480px) {
+    .student-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .cover-title {
+        font-size: 28px !important;
+    }
+    
+    h2 {
+        font-size: 20px !important;
+    }
+}
+
+	
     </style>
 </head>
 <body>
@@ -1654,6 +2069,78 @@ function generateDefaultSiswa(kelasNama) {
     }
     return siswa;
 }
+
+// Deteksi Mobile
+// Deteksi mobile dan ubah ke vertical scroll mode
+const isMobile = window.innerWidth <= 768;
+
+if (isMobile) {
+    // Tambahkan class untuk styling
+    document.body.classList.add('mobile-mode');
+    
+    // Setelah pilih kelas, setup vertical scroll
+    const originalPilihKelas = pilihKelas;
+    pilihKelas = function(kodeKelas) {
+        originalPilihKelas(kodeKelas);
+        
+        // Tunggu animasi selesai
+        setTimeout(() => {
+            setupMobileScroll();
+        }, 1000);
+    };
+}
+
+function setupMobileScroll() {
+    // Pastikan semua halaman visible
+    document.querySelectorAll('.page').forEach(page => {
+        page.style.cssText = `
+            position: relative !important;
+            width: 100% !important;
+            height: auto !important;
+            min-height: 100vh;
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: none !important;
+            display: block !important;
+            margin-bottom: 0;
+        `;
+    });
+    
+    // Show semua page-content
+    document.querySelectorAll('.page-content').forEach(content => {
+        content.classList.add('active');
+        content.style.cssText = `
+            position: relative !important;
+            display: block !important;
+            height: auto !important;
+            min-height: calc(100vh - 100px);
+        `;
+    });
+    
+    // Hide navigation di mobile
+    document.getElementById('navButtons').style.display = 'none';
+    
+    // Smooth scroll
+    document.querySelector('.book-wrapper').style.cssText = `
+        overflow-y: auto;
+        height: 100vh;
+        align-items: flex-start;
+        -webkit-overflow-scrolling: touch;
+    `;
+}
+
+// Responsive handler
+window.addEventListener('resize', () => {
+    if (window.innerWidth <= 768) {
+        document.body.classList.add('mobile-mode');
+        if (currentKelas) setupMobileScroll();
+    } else {
+        document.body.classList.remove('mobile-mode');
+        // Kembali ke book mode
+        location.reload();
+    }
+});
+
 
 let currentKelas = null;
 let currentSpread = 1;
@@ -2567,6 +3054,30 @@ document.getElementById('zoomClose').addEventListener('click', (e) => {
     e.stopPropagation();
     tutupZoomFoto();
 });
+
+// Swipe gesture untuk mobile
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+}, {passive: true});
+
+document.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+}, {passive: true});
+
+function handleSwipe() {
+    if (touchEndX < touchStartX - 50) {
+        // Swipe left - next page
+        if (currentSpread < totalSpread) goNext();
+    }
+    if (touchEndX > touchStartX + 50) {
+        // Swipe right - prev page
+        if (currentSpread > 1) goPrev();
+    }
+}
 
 document.addEventListener('change', e => {
     if (e.target.classList.contains('student-file-input') && !e.target.disabled) {
