@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Album Kenangan - SMP Negeri 110 Jakarta</title>
     
-    <!-- LIBRARY WAJIB UNTUK EXPORT PDF -->
+    <!-- LIBRARY WAJIB -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -33,6 +33,7 @@
             }
         }
     </script>
+    
     <style type="text/tailwindcss">
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
 
@@ -51,7 +52,7 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* ===== HALAMAN LANDING ===== */
+        /* ===== LANDING PAGE ===== */
         .landing-page {
             position: fixed;
             inset: 0;
@@ -64,7 +65,6 @@
             background: linear-gradient(to bottom, #050810 0%, #0a0e1a 40%, #1a1f3a 70%, #0f1428 100%);
             overflow-y: auto;
         }
-
         .landing-page.hidden { display: none; }
 
         .landing-title {
@@ -104,45 +104,30 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-.kelas-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr); /* 6 kolom dalam 1 baris */
-    gap: 20px;
-    max-width: 1400px; /* Lebih lebar untuk muat 6 kartu */
-    width: 100%;
-    padding: 20px 40px;
-    animation: fadeInUp 1s ease-out 0.6s backwards;
-}
-
-/* Tablet: 3 kolom per baris */
-@media (max-width: 1024px) {
-    .kelas-grid {
-        grid-template-columns: repeat(3, 1fr);
-        max-width: 900px;
-    }
-}
-
-/* HP: 2 kolom per baris */
-@media (max-width: 768px) {
-    .kelas-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-        padding: 20px;
-    }
-}
-
-/* HP Kecil: 1 kolom */
-@media (max-width: 480px) {
-    .kelas-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        padding: 15px;
-    }
-}
-
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== GRID KELAS ===== */
+        .kelas-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 20px;
+            max-width: 1400px;
+            width: 100%;
+            padding: 20px 40px;
+            animation: fadeInUp 1s ease-out 0.6s backwards;
+        }
+
+        @media (max-width: 1024px) {
+            .kelas-grid { grid-template-columns: repeat(3, 1fr); max-width: 900px; }
+        }
+        @media (max-width: 768px) {
+            .kelas-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; }
+        }
+        @media (max-width: 480px) {
+            .kelas-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
         }
 
         .kelas-card {
@@ -254,7 +239,7 @@
             transform-origin: left center;
             transform: rotateY(0deg);
             transition: transform 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
-            z-index: 100; 
+            z-index: 100;
             border: none;
             padding: 0;
             backface-visibility: hidden;
@@ -342,8 +327,6 @@
             position: relative;
             animation: ringEnter 0.6s ease-out backwards;
         }
-
-        .spiral-ring:nth-child(n) { animation-delay: calc(0.1s + var(--i, 0) * 0.05s); }
 
         @keyframes ringEnter {
             from { transform: scaleX(0); opacity: 0; }
@@ -526,7 +509,6 @@
             opacity: 0;
             visibility: hidden;
         }
-
         .page-left.active { opacity: 1; visibility: visible; }
 
         .page-right {
@@ -603,118 +585,98 @@
             color: #b0b8d1;
         }
 
+        /* ===== DAFTAR ISI ===== */
+        .space-y-6 {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .space-y-6::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+        }
+
         .space-y-6 > * {
             margin-top: clamp(15px, 1.8vw, 18px);
             position: relative;
             z-index: 10;
         }
 
-        /* Container Daftar Isi */
-.space-y-6 {
-    position: relative;
-    padding: 20px 0;
-}
+        .toc-item {
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-left: -8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            border: 1px solid transparent;
+        }
 
-.space-y-6::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #d4af37, transparent);
-}
+        .toc-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 0;
+            background: linear-gradient(180deg, #d4af37, #e8b4a8);
+            transition: height 0.3s ease;
+            border-radius: 2px;
+        }
 
-.space-y-6 > * {
-    margin-top: clamp(15px, 1.8vw, 18px);
-    position: relative;
-    z-index: 10;
-}
+        .toc-item:hover {
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.08), rgba(212, 175, 55, 0.02));
+            transform: translateX(8px);
+            border-color: rgba(212, 175, 55, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
 
-/* Item Daftar Isi */
-.toc-item {
-    cursor: pointer;
-    border-radius: 8px;
-    padding: 16px 20px;
-    margin-left: -8px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    border: 1px solid transparent;
-}
+        .toc-item:hover::before { height: 60%; }
+        .toc-item:hover .toc-number { color: #e8b4a8; text-shadow: 0 0 10px rgba(232, 180, 168, 0.3); }
+        .toc-item:hover .toc-title { color: #f0c5b8; letter-spacing: 1px; }
 
-.toc-item::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 3px;
-    height: 0;
-    background: linear-gradient(180deg, #d4af37, #e8b4a8);
-    transition: height 0.3s ease;
-    border-radius: 2px;
-}
+        .toc-number {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 700;
+            color: #4a536b;
+            transition: all 0.3s ease;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            min-width: 120px;
+            text-align: right;
+        }
 
-.toc-item:hover {
-    background: linear-gradient(90deg, rgba(212, 175, 55, 0.08), rgba(212, 175, 55, 0.02));
-    transform: translateX(8px);
-    border-color: rgba(212, 175, 55, 0.2);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
+        .toc-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(16px, 2vw, 20px);
+            font-weight: 600;
+            color: #c9a227;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
 
-.toc-item:hover::before {
-    height: 60%;
-}
+        .toc-item:not(:last-child) {
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
 
-.toc-item:hover .toc-number {
-    color: #e8b4a8;
-    text-shadow: 0 0 10px rgba(232, 180, 168, 0.3);
-}
-
-.toc-item:hover .toc-title {
-    color: #f0c5b8;
-    letter-spacing: 1px;
-}
-
-/* Nomor Halaman */
-.toc-number {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(32px, 4vw, 48px);
-    font-weight: 700;
-    color: #4a536b;
-    transition: all 0.3s ease;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    min-width: 120px;
-    text-align: right;
-}
-
-/* Judul Bagian */
-.toc-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(16px, 2vw, 20px);
-    font-weight: 600;
-    color: #c9a227;
-    letter-spacing: 2px;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-/* Garis pemisah antar item */
-.toc-item:not(:last-child) {
-    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-}
-
-.toc-item:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 20%;
-    right: 20%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
-}
+        .toc-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+        }
 
         .grid-2 {
             display: grid;
@@ -734,9 +696,9 @@
             overflow: hidden;
             z-index: 5;
         }
-        
         .page-content.active { display: block; }
 
+        /* ===== STUDENT GRID ===== */
         .student-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -773,7 +735,7 @@
             position: relative;
             overflow: hidden;
             flex-shrink: 0;
-            cursor: pointer; 
+            cursor: pointer;
             z-index: 12;
             transition: transform 0.2s ease;
         }
@@ -794,7 +756,7 @@
             opacity: 0;
             transition: opacity 0.2s ease;
         }
-        
+
         .photo-frame:hover::after { opacity: 1; }
 
         .photo-frame img {
@@ -827,13 +789,14 @@
             padding: 0 4px;
         }
 
+        /* ===== NAVIGATION ===== */
         .nav-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 60; 
+            z-index: 60;
             pointer-events: none;
         }
 
@@ -841,7 +804,7 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            pointer-events: auto; 
+            pointer-events: auto;
             width: 52px;
             height: 52px;
             border-radius: 50%;
@@ -859,16 +822,8 @@
 
         #prevBtn { left: 15px; }
         #nextBtn { right: 15px; }
-        #backToLanding { 
-            top: 15px; 
-            left: 15px; 
-            transform: none;
-        }
-        #coverBtn {
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
+        #backToLanding { top: 15px; left: 15px; transform: none; }
+        #coverBtn { top: 15px; left: 50%; transform: translateX(-50%); }
 
         .feature-buttons {
             position: fixed;
@@ -900,22 +855,25 @@
         .feature-btn:hover { transform: scale(1.1); box-shadow: 0 4px 20px rgba(201, 162, 39, 0.4); }
         .feature-btn.active { background: #c9a227; color: #ffffff; }
 
+        /* ===== PAGE BORDER ===== */
         .page-border-container {
             position: absolute;
             inset: 20px;
             border: 2px solid #c9a227;
-            pointer-events: none; 
+            pointer-events: none;
             height: calc(100% - 40px);
             width: calc(100% - 40px);
             box-shadow: 0 0 15px rgba(201, 162, 39, 0.15);
-            z-index: 0; 
+            z-index: 0;
         }
+
         .page-border-container::before {
             content: '';
             position: absolute;
             inset: 4px;
             border: 1px solid rgba(201, 162, 39, 0.4);
         }
+
         .corner-ornament {
             position: absolute;
             width: 16px;
@@ -926,7 +884,7 @@
         .corner-tr { top: -2px; right: -2px; border-left: none; border-bottom: none; }
         .corner-bl { bottom: -2px; left: -2px; border-right: none; border-top: none; }
         .corner-br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
-        
+
         .corner-dot {
             position: absolute;
             width: 4px;
@@ -943,6 +901,7 @@
         .photo-frame.sudah-terisi:hover { transform: none !important; }
         .photo-frame.sudah-terisi { cursor: zoom-in; }
 
+        /* ===== ZOOM OVERLAY ===== */
         .zoom-overlay {
             position: fixed;
             inset: 0;
@@ -958,6 +917,7 @@
             padding: 40px;
         }
         .zoom-overlay.active { opacity: 1; visibility: visible; }
+
         .zoom-frame {
             width: min(60vw, 420px);
             aspect-ratio: 4/5;
@@ -966,6 +926,7 @@
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .zoom-overlay.active .zoom-frame { transform: scale(1.3); }
+
         .zoom-frame-inner {
             position: relative;
             width: 100%;
@@ -975,6 +936,7 @@
             cursor: pointer;
         }
         .zoom-frame-inner.flipped { transform: rotateY(180deg); }
+
         .zoom-face {
             position: absolute;
             inset: 0;
@@ -1063,6 +1025,7 @@
 
         .student-name, .student-bio, .student-quote { transition: all 0.2s ease; }
 
+        /* ===== DECORATIONS ===== */
         .book-reflection {
             width: var(--book-width);
             height: calc(var(--book-height) * 0.3);
@@ -1095,18 +1058,11 @@
             content: "";
             width: 4px;
             height: 100%;
-            background: repeating-linear-gradient(
-                to bottom,
-                #d4af37 0px,
-                #d4af37 6px,
-                transparent 6px,
-                transparent 18px
-            );
+            background: repeating-linear-gradient(to bottom, #d4af37 0px, #d4af37 6px, transparent 6px, transparent 18px);
             border-radius: 2px;
             box-shadow: 0 0 6px rgba(212,175,55,0.6);
         }
 
-        /* Stars */
         .stars-container {
             position: fixed;
             inset: 0;
@@ -1148,7 +1104,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* PDF Loading Overlay */
+        /* ===== PDF LOADING ===== */
         .pdf-loading {
             position: fixed;
             inset: 0;
@@ -1163,8 +1119,10 @@
             transition: opacity 0.3s ease;
         }
         .pdf-loading.active { opacity: 1; visibility: visible; }
+
         .pdf-spinner {
-            width: 60px; height: 60px;
+            width: 60px;
+            height: 60px;
             border: 4px solid rgba(201, 162, 39, 0.2);
             border-top-color: #c9a227;
             border-radius: 50%;
@@ -1172,11 +1130,128 @@
             margin-bottom: 20px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .pdf-text { color: #ffffff; font-size: 18px; font-family: 'Playfair Display', serif; letter-spacing: 2px; }
-        .pdf-progress { margin-top: 15px; width: 200px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
-        .pdf-progress-bar { height: 100%; background: #c9a227; width: 0%; transition: width 0.3s ease; }
 
-        /* Print Styles */
+        .pdf-text {
+            color: #ffffff;
+            font-size: 18px;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 2px;
+        }
+
+        .pdf-progress {
+            margin-top: 15px;
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .pdf-progress-bar {
+            height: 100%;
+            background: #c9a227;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* ===== FOTO WALI KELAS ===== */
+        .btn-upload-wali {
+            position: absolute;
+            top: 40px;
+            right: 35px;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 8px;
+            color: #d4af37;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 20;
+        }
+
+        .btn-upload-wali:hover {
+            color: #e8b4a8;
+            transform: scale(1.15);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .btn-upload-wali i { font-size: 22px; }
+        .btn-upload-wali span { display: none; }
+
+        .foto-wali-grid-final {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 10px 60px;
+            height: calc(100% - 90px);
+            overflow: hidden;
+        }
+
+        .foto-item-final {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 3px solid #d4af37;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 700px;
+            flex: 1;
+            min-height: 0;
+            background: #0d1a2e;
+        }
+
+        .foto-item-final img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .foto-delete-btn-final {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 32px;
+            height: 32px;
+            background: rgba(220, 38, 38, 0.9);
+            border: 2px solid white;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            z-index: 10;
+        }
+
+        .foto-item-final:hover .foto-delete-btn-final { opacity: 1; }
+        .foto-delete-btn-final:hover { background: #dc2626; transform: scale(1.1); }
+
+        .foto-placeholder-final {
+            width: 100%;
+            max-width: 700px;
+            flex: 1;
+            min-height: 80px;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7a85a3;
+            font-size: 13px;
+            font-style: italic;
+            background: rgba(212, 175, 55, 0.03);
+        }
+
+        /* ===== PRINT ===== */
         @media print {
             .nav-container, .feature-buttons, .stars-container, .aurora-bg, .book-reflection, .spiral-binding, .zoom-overlay, .pdf-loading, .landing-page { display: none !important; }
             body { background: white !important; margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -1193,126 +1268,12 @@
             .student-name { font-size: 12px !important; }
             .student-bio, .student-quote { font-size: 10px !important; }
             .btn-simpan-data, .student-file-input { display: none !important; }
-            .empty-box { min-height: 120px !important; border: 2px dashed #ccc !important; background: #f9f9f9 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .empty-box { min-height: 120px !important; border: 2px dashed #ccc !important; background: #f9f9f9 !important; }
             h2 { font-size: 20px !important; margin-bottom: 15px !important; page-break-after: avoid; break-after: avoid; }
             .page-number { position: relative !important; bottom: auto !important; margin-top: 20px; text-align: center; }
             .grid-2 { grid-template-columns: 1fr 1fr !important; gap: 15px !important; }
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
         }
-		
-/* Tombol Upload - TANPA GARIS PUTUS-PUTUS */
-/* Tombol Upload - Hanya Icon, Tanpa Kotak */
-.btn-upload-wali {
-    position: absolute;
-    top: 40px; /* Turun dari 20px ke 40px agar tidak kena garis */
-    right: 35px;
-    background: transparent; /* Hapus background kotak */
-    border: none; /* Hapus border */
-    border-radius: 0;
-    padding: 8px;
-    color: #d4af37;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    z-index: 20;
-}
-
-.btn-upload-wali:hover {
-    color: #e8b4a8;
-    transform: scale(1.15);
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-}
-
-.btn-upload-wali i {
-    font-size: 22px; /* Icon lebih besar */
-}
-
-.btn-upload-wali span {
-    display: none; /* Sembunyikan teks "Upload Foto" */
-}
-/* Grid Foto - VERTIKAL (ATAS-BAWAH) */
-.foto-wali-grid-final {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    padding: 10px 60px;
-    height: calc(100% - 90px);
-    overflow: hidden;
-}
-
-/* Item Foto - LEBAR PENUH */
-.foto-item-final {
-    position: relative;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 3px solid #d4af37;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-    width: 100%;
-    max-width: 700px;
-    flex: 1;
-    min-height: 0;
-    background: #0d1a2e;
-}
-
-.foto-item-final img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-/* Tombol Hapus */
-.foto-delete-btn-final {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 32px;
-    height: 32px;
-    background: rgba(220, 38, 38, 0.9);
-    border: 2px solid white;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: all 0.3s ease;
-    font-size: 14px;
-    z-index: 10;
-}
-
-.foto-item-final:hover .foto-delete-btn-final {
-    opacity: 1;
-}
-
-.foto-delete-btn-final:hover {
-    background: #dc2626;
-    transform: scale(1.1);
-}
-
-/* Placeholder */
-.foto-placeholder-final {
-    width: 100%;
-    max-width: 700px;
-    flex: 1;
-    min-height: 80px;
-    border: 2px solid rgba(212, 175, 55, 0.2);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #7a85a3;
-    font-size: 13px;
-    font-style: italic;
-    background: rgba(212, 175, 55, 0.03);
-}
-
-
     </style>
 </head>
 <body>
@@ -1320,15 +1281,12 @@
     <div class="aurora-bg"></div>
     <div class="stars-container" id="starsContainer"></div>
 
-    <!-- ===== HALAMAN LANDING PEMILIH KELAS ===== -->
+    <!-- ===== LANDING PAGE ===== -->
     <div class="landing-page" id="landingPage">
         <h1 class="landing-title">ALBUM KENANGAN</h1>
         <p class="landing-subtitle">SMP NEGERI 110 JAKARTA</p>
         <p class="landing-school">Tahun Ajaran 2025 / 2026</p>
-        
-        <div class="kelas-grid" id="kelasGrid">
-            <!-- Kelas cards akan di-generate oleh JavaScript -->
-        </div>
+        <div class="kelas-grid" id="kelasGrid"></div>
     </div>
 
     <!-- ===== ALBUM BOOK ===== -->
@@ -1336,11 +1294,12 @@
         <div class="book" id="book">
             <div class="spiral-binding"></div>
             
+            <!-- COVER -->
             <div class="page page-cover" id="cover">
                 <div class="cover-front">
                     <div class="spiral-left" id="spiralLeft"></div>
 
-                    <!-- Floral Corner Ornaments -->
+                    <!-- Floral Corners -->
                     <div class="floral-corner floral-corner-tl">
                         <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
                             <g fill="none" stroke="#e8b4a8" stroke-width="1.5">
@@ -1425,7 +1384,7 @@
                 <div class="cover-back"></div>
             </div>
 
-            <!-- Halaman Kiri -->
+            <!-- HALAMAN KIRI -->
             <div class="page page-left" id="pageLeft">
                 <div class="page-border-container">
                     <div class="corner-ornament corner-tl"></div>
@@ -1442,28 +1401,28 @@
                     <h2>DAFTAR ISI</h2>
                     <div class="space-y-6">
                         <div class="flex items-center gap-6 toc-item" data-spread="2">
-                            <span class="text-4xl font-serif font-bold text-gray-600">03 - 04</span>
-                            <div><h3>DAFTAR MURID 1 - 12</h3></div>
+                            <span class="toc-number">03 - 04</span>
+                            <div class="toc-title">DAFTAR MURID 1 - 12</div>
                         </div>
                         <div class="flex items-center gap-6 toc-item" data-spread="3">
-                            <span class="text-4xl font-serif font-bold text-gray-600">05 - 06</span>
-                            <div><h3>DAFTAR MURID 13 - 24</h3></div>
+                            <span class="toc-number">05 - 06</span>
+                            <div class="toc-title">DAFTAR MURID 13 - 24</div>
                         </div>
                         <div class="flex items-center gap-6 toc-item" data-spread="4">
-                            <span class="text-4xl font-serif font-bold text-gray-600">07 - 08</span>
-                            <div><h3>DAFTAR MURID 25 - 36</h3></div>
+                            <span class="toc-number">07 - 08</span>
+                            <div class="toc-title">DAFTAR MURID 25 - 36</div>
                         </div>
                         <div class="flex items-center gap-6 toc-item" data-spread="5">
-                            <span class="text-4xl font-serif font-bold text-gray-600">09 - 10</span>
-                            <div><h3>PERTEMUAN & KEBERSAMAAN</h3></div>
+                            <span class="toc-number">09 - 10</span>
+                            <div class="toc-title">PERTEMUAN & KEBERSAMAAN</div>
                         </div>
                         <div class="flex items-center gap-6 toc-item" data-spread="6">
-                            <span class="text-4xl font-serif font-bold text-gray-600">11 - 12</span>
-                            <div><h3>PESAN & KESAN</h3></div>
+                            <span class="toc-number">11 - 12</span>
+                            <div class="toc-title">PESAN & KESAN</div>
                         </div>
                         <div class="flex items-center gap-6 toc-item" data-spread="7">
-                            <span class="text-4xl font-serif font-bold text-gray-600">13 - 14</span>
-                            <div><h3>UCAPAN GURU & PENUTUP</h3></div>
+                            <span class="toc-number">13 - 14</span>
+                            <div class="toc-title">UCAPAN GURU & PENUTUP</div>
                         </div>
                     </div>
                     <div class="page-number">- 1 -</div>
@@ -1532,7 +1491,7 @@
                 </div>
             </div>
 
-            <!-- Halaman Kanan -->
+            <!-- HALAMAN KANAN -->
             <div class="page page-right" id="pageRight">
                 <div class="page-border-container">
                     <div class="corner-ornament corner-tl"></div>
@@ -1545,24 +1504,16 @@
                     <div class="corner-dot dot-br"></div>
                 </div>
                     
-<div class="page-content active" id="right-2">
-    <h2>FOTO MURID <span id="fotoKelasTitle">KELAS VIII-F</span> <br>BERSAMA WALI KELAS</h2>
-    
-    <!-- Tombol Upload di Kanan Atas -->
-    <button class="btn-upload-wali" onclick="document.getElementById('fotoWaliInput').click()" title="Upload Foto">
-        <i class="fa fa-camera"></i>
-        <span></span>
-    </button>
-    
-    <!-- Grid Foto - 2 Foto Berdampingan -->
-    <div class="foto-wali-grid-final" id="fotoWaliGrid">
-        <!-- Foto akan dirender di sini -->
-    </div>
-    
-    <input type="file" id="fotoWaliInput" accept="image/*" style="display: none;" onchange="handleFotoWaliUpload(event)">
-    
-    <div class="page-number">- 2 -</div>
-</div>
+                <div class="page-content active" id="right-2">
+                    <h2>FOTO MURID <span id="fotoKelasTitle">KELAS VIII-F</span> <br>BERSAMA WALI KELAS</h2>
+                    <button class="btn-upload-wali" onclick="document.getElementById('fotoWaliInput').click()" title="Upload Foto">
+                        <i class="fa fa-camera"></i>
+                        <span></span>
+                    </button>
+                    <div class="foto-wali-grid-final" id="fotoWaliGrid"></div>
+                    <input type="file" id="fotoWaliInput" accept="image/*" style="display: none;" onchange="handleFotoWaliUpload(event)">
+                    <div class="page-number">- 2 -</div>
+                </div>
 
                 <div class="page-content" id="right-4">
                     <h2>DAFTAR MURID 7 - 12</h2>
@@ -1627,28 +1578,20 @@
         <div class="book-reflection"></div>
     </div>
 
+    <!-- NAVIGATION -->
     <div class="nav-container" id="navButtons" style="display: none;">
-        <button id="backToLanding" class="nav-btn" title="Kembali ke Pilih Kelas">
-            <i class="fa fa-th"></i>
-        </button>
-        <button id="coverBtn" class="nav-btn" title="Kembali ke Sampul">
-            <i class="fa fa-home"></i>
-        </button>
-        <button id="prevBtn" class="nav-btn" title="Halaman Sebelumnya">
-            <i class="fa fa-arrow-left"></i>
-        </button>
-        <button id="nextBtn" class="nav-btn" title="Halaman Berikutnya">
-            <i class="fa fa-arrow-right"></i>
-        </button>
+        <button id="backToLanding" class="nav-btn" title="Kembali ke Pilih Kelas"><i class="fa fa-th"></i></button>
+        <button id="coverBtn" class="nav-btn" title="Kembali ke Sampul"><i class="fa fa-home"></i></button>
+        <button id="prevBtn" class="nav-btn" title="Halaman Sebelumnya"><i class="fa fa-arrow-left"></i></button>
+        <button id="nextBtn" class="nav-btn" title="Halaman Berikutnya"><i class="fa fa-arrow-right"></i></button>
     </div>
 
-    <!-- FEATURE BUTTONS (BARU: Ada Tombol Export PDF) -->
+    <!-- FEATURE BUTTONS -->
     <div class="feature-buttons" id="featureButtons" style="display: none;">
-        <button class="feature-btn" id="btnExportPDF" title="Export PDF">
-            <i class="fa fa-file-pdf-o"></i>
-        </button>
+        <button class="feature-btn" id="btnExportPDF" title="Export PDF"><i class="fa fa-file-pdf-o"></i></button>
     </div>
 
+    <!-- ZOOM OVERLAY -->
     <div class="zoom-overlay" id="zoomOverlay">
         <div class="zoom-close" id="zoomClose"><i class="fa fa-times"></i></div>
         <div class="zoom-frame">
@@ -1666,7 +1609,7 @@
         </div>
     </div>
 
-    <!-- PDF LOADING OVERLAY -->
+    <!-- PDF LOADING -->
     <div class="pdf-loading" id="pdfLoading">
         <div class="pdf-spinner"></div>
         <div class="pdf-text">Mengekspor PDF...</div>
@@ -1677,9 +1620,8 @@
 
 <script>
 // =================================================================
-// ===== KONFIGURASI KELAS =====
+// KONFIGURASI
 // =================================================================
-
 const KELAS_LIST = [
     { kode: 'VIII-A', nama: 'VIII-A', icon: '🛡️', jumlah: 36, tagline: '' },
     { kode: 'VIII-B', nama: 'VIII-B', icon: '📖', jumlah: 36, tagline: '' },
@@ -1713,19 +1655,15 @@ function generateDefaultSiswa(kelasNama) {
     return siswa;
 }
 
-// =================================================================
-// ===== VARIABEL GLOBAL =====
-// =================================================================
-
 let currentKelas = null;
 let currentSpread = 1;
 const totalSpread = 7;
+let fotoWaliList = [];
 
-// URL Apps Script Anda
 const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbyu-0mWLIOJILNRHXJnspmhd-jGQY8aUqHgnibgkaN7L3Dj5NhMA_7ZL-yTsi1oiIvG-A/exec";
 
 // =================================================================
-// ===== HELPER: KONVERSI URL DRIVE =====
+// HELPER: KONVERSI URL DRIVE
 // =================================================================
 function konversiUrlDrive(url) {
     if (!url) return url;
@@ -1753,9 +1691,8 @@ function konversiUrlDrive(url) {
 }
 
 // =================================================================
-// ===== INISIALISASI HALAMAN LANDING =====
+// LANDING PAGE
 // =================================================================
-
 function initLandingPage() {
     const grid = document.getElementById('kelasGrid');
     grid.innerHTML = '';
@@ -1790,10 +1727,9 @@ function pilihKelas(kodeKelas) {
     generateStudentCards();
     muatDataSiswa();
     
-    // Load foto wali kelas
     setTimeout(() => {
         loadFotoWaliKelas();
-    }, 500); // Delay 500ms untuk memastikan DOM ready
+    }, 500);
 }
 
 function kembaliKeLanding() {
@@ -1816,11 +1752,9 @@ function kembaliKeLanding() {
 }
 
 // =================================================================
-// ===== GENERATE KARTU SISWA =====
+// STUDENT CARDS
 // =================================================================
-
 function createStudentCardHTML(siswa) {
-    const num = String(siswa.id).padStart(2, '0');
     return `
         <div class="student-card" data-id="${siswa.id}">
             <div class="photo-frame">
@@ -1849,9 +1783,8 @@ function generateStudentCards() {
 }
 
 // =================================================================
-// ===== STARS & SPIRAL =====
+// DECORATIONS
 // =================================================================
-
 function createStars() {
     const container = document.getElementById('starsContainer');
     const starCount = 150;
@@ -1881,9 +1814,8 @@ function createSpiralHoles() {
 }
 
 // =================================================================
-// ===== COVER & NAVIGATION =====
+// NAVIGATION
 // =================================================================
-
 function bukaCover() {
     const cover = document.getElementById('cover');
     if (cover.style.transform === 'rotateY(-180deg)') return;
@@ -1948,9 +1880,8 @@ function goPrev() {
 }
 
 // =================================================================
-// ===== STUDENT DATA FUNCTIONS =====
+// STUDENT DATA FUNCTIONS
 // =================================================================
-
 function kunciTotal(card) {
     const nama = card.querySelector('.student-name');
     const ttl = card.querySelector('.student-bio');
@@ -2032,18 +1963,15 @@ function tutupZoomFoto() {
     document.body.style.overflow = '';
 }
 
-
 // =================================================================
-// ===== FITUR: EXPORT PDF =====
+// EXPORT PDF
 // =================================================================
-
 async function exportPDF() {
     if (!currentKelas) {
         alert('❌ Pilih kelas terlebih dahulu!');
         return;
     }
 
-    // Loading overlay
     let loading = document.getElementById('pdfLoading');
     if (!loading) {
         loading = document.createElement('div');
@@ -2068,7 +1996,6 @@ async function exportPDF() {
     try {
         await document.fonts.ready;
 
-        // Container tersembunyi untuk render halaman
         const renderContainer = document.createElement('div');
         renderContainer.id = 'pdf-render-container';
         renderContainer.style.cssText = `
@@ -2079,7 +2006,6 @@ async function exportPDF() {
         `;
         document.body.appendChild(renderContainer);
 
-        // Helper: buat halaman dengan ukuran tetap A4 landscape (1120x794px)
         const createPage = (content, bgColor = '#ffffff') => {
             const page = document.createElement('div');
             page.style.cssText = `
@@ -2096,129 +2022,84 @@ async function exportPDF() {
             return page;
         };
 
+        const createStudentCard = (siswa) => {
+            const card = document.querySelector(`.student-card[data-id="${siswa.id}"]`);
+            let nama = siswa.nama, ttl = siswa.ttl, kutipan = siswa.kutipan;
+            let fotoSrc = '';
 
- // Helper: buat card siswa - TEKS TIDAK TERPOTONG
-const createStudentCard = (siswa) => {
-    const card = document.querySelector(`.student-card[data-id="${siswa.id}"]`);
-    let nama = siswa.nama, ttl = siswa.ttl, kutipan = siswa.kutipan;
-    let fotoSrc = '';
+            if (card) {
+                const nameEl = card.querySelector('.student-name');
+                const bioEl = card.querySelector('.student-bio');
+                const quoteEl = card.querySelector('.student-quote');
+                const imgEl = card.querySelector('.photo-frame img');
 
-    if (card) {
-        const nameEl = card.querySelector('.student-name');
-        const bioEl = card.querySelector('.student-bio');
-        const quoteEl = card.querySelector('.student-quote');
-        const imgEl = card.querySelector('.photo-frame img');
+                if (nameEl) nama = nameEl.textContent.trim();
+                if (bioEl) ttl = bioEl.textContent.trim();
+                if (quoteEl) kutipan = quoteEl.textContent.trim();
 
-        if (nameEl) nama = nameEl.textContent.trim();
-        if (bioEl) ttl = bioEl.textContent.trim();
-        if (quoteEl) kutipan = quoteEl.textContent.trim();
+                if (imgEl && imgEl.src && !imgEl.src.includes('foto_siswa/')) {
+                    fotoSrc = konversiUrlDrive(imgEl.src);
+                }
+            }
 
-        if (imgEl && imgEl.src && !imgEl.src.includes('foto_siswa/')) {
-            fotoSrc = konversiUrlDrive(imgEl.src);
-        }
-    }
+            const fotoHTML = fotoSrc 
+                ? `<img src="${fotoSrc}" crossorigin="anonymous" style="width:160px;height:200px;object-fit:cover;border-radius:4px;display:block;">`
+                : `<div style="width:160px;height:200px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:600;">Foto ${String(siswa.id).padStart(2,'0')}</div>`;
 
-    // ✅ FOTO 160x200px (rasio 4:5, tidak gepeng)
-    const fotoHTML = fotoSrc 
-        ? `<img src="${fotoSrc}" crossorigin="anonymous" style="width:160px;height:200px;object-fit:cover;border-radius:4px;display:block;">`
-        : `<div style="width:160px;height:200px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:600;">Foto ${String(siswa.id).padStart(2,'0')}</div>`;
+            return `
+                <div style="text-align:center;background:#f8f9fa;padding:12px;border-radius:8px;border:2px solid #e0e6f0;height:300px;display:flex;flex-direction:column;box-sizing:border-box;">
+                    <div style="width:160px;height:200px;margin:0 auto 8px auto;overflow:hidden;border-radius:4px;flex-shrink:0;">
+                        ${fotoHTML}
+                    </div>
+                    <div style="font-weight:700;color:#1e3a5f;font-size:13px;margin-bottom:4px;line-height:1.3;word-wrap:break-word;">${nama}</div>
+                    <div style="font-size:10px;color:#647092;margin-bottom:4px;line-height:1.3;word-wrap:break-word;">${ttl}</div>
+                    <div style="font-size:9px;color:#9ca5c2;font-style:italic;line-height:1.3;word-wrap:break-word;">${kutipan}</div>
+                </div>
+            `;
+        };
 
-    // ✅ CARD TINGGI 300px - RUANG CUKUP UNTUK FOTO + TEKS
-    // ✅ HAPUS overflow:hidden dan text-overflow:ellipsis
-    return `
-        <div style="text-align:center;background:#f8f9fa;padding:12px;border-radius:8px;border:2px solid #e0e6f0;height:300px;display:flex;flex-direction:column;box-sizing:border-box;">
-            <div style="width:160px;height:200px;margin:0 auto 8px auto;overflow:hidden;border-radius:4px;flex-shrink:0;">
-                ${fotoHTML}
+        // COVER ELEGAN
+        if (progressBar) progressBar.style.width = '10%';
+        if (loadingText) loadingText.innerText = 'Membuat cover elegan...';
+
+        const coverContent = `
+            <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,#1a2847 0%,#0a1628 70%);"></div>
+            <div style="position:absolute;inset:30px;border:2px solid #d4af37;pointer-events:none;"></div>
+            <div style="position:absolute;inset:40px;border:1px solid rgba(212,175,55,0.5);pointer-events:none;"></div>
+            <div style="position:absolute;inset:50px;border:1px solid rgba(212,175,55,0.3);pointer-events:none;"></div>
+            <div style="position:absolute;top:50px;left:50px;width:60px;height:60px;border-top:3px solid #d4af37;border-left:3px solid #d4af37;"></div>
+            <div style="position:absolute;top:50px;right:50px;width:60px;height:60px;border-top:3px solid #d4af37;border-right:3px solid #d4af37;"></div>
+            <div style="position:absolute;bottom:50px;left:50px;width:60px;height:60px;border-bottom:3px solid #d4af37;border-left:3px solid #d4af37;"></div>
+            <div style="position:absolute;bottom:50px;right:50px;width:60px;height:60px;border-bottom:3px solid #d4af37;border-right:3px solid #d4af37;"></div>
+            <div style="position:absolute;top:60px;left:50%;transform:translateX(-50%);text-align:center;color:#d4af37;font-size:24px;letter-spacing:8px;">✦ ❦ ✦</div>
+            <div style="position:relative;z-index:10;text-align:center;padding:80px 60px;">
+                <div style="font-family:'Playfair Display',Georgia,serif;font-size:72px;color:#e8b4a8;letter-spacing:8px;font-weight:700;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,0.5);">ALBUM</div>
+                <div style="font-family:'Playfair Display',Georgia,serif;font-size:72px;color:#e8b4a8;letter-spacing:8px;font-weight:700;margin-bottom:30px;text-shadow:2px 2px 4px rgba(0,0,0,0.5);">KENANGAN</div>
+                <div style="display:flex;align-items:center;justify-content:center;margin:30px 0;">
+                    <div style="width:150px;height:1px;background:linear-gradient(90deg,transparent,#d4af37);"></div>
+                    <div style="margin:0 20px;color:#d4af37;font-size:20px;">❦</div>
+                    <div style="width:150px;height:1px;background:linear-gradient(90deg,#d4af37,transparent);"></div>
+                </div>
+                <div style="font-family:'Playfair Display',Georgia,serif;font-size:26px;color:#d0d5e0;letter-spacing:4px;margin:20px 0;font-weight:600;">SMP NEGERI 110 JAKARTA</div>
+                <div style="font-size:18px;color:#a0a8c0;letter-spacing:3px;margin:15px 0;">Tahun Ajaran 2025 / 2026</div>
+                <div style="display:flex;align-items:center;justify-content:center;margin:40px 0;">
+                    <div style="width:80px;height:1px;background:linear-gradient(90deg,transparent,#d4af37);"></div>
+                    <div style="margin:0 15px;color:#d4af37;font-size:14px;">• • •</div>
+                    <div style="width:80px;height:1px;background:linear-gradient(90deg,#d4af37,transparent);"></div>
+                </div>
+                <div style="font-family:'Playfair Display',Georgia,serif;font-size:48px;color:#d4af37;letter-spacing:6px;font-weight:700;margin:20px 0;text-shadow:2px 2px 4px rgba(0,0,0,0.5);">Kelas ${currentKelas.nama}</div>
+                <div style="display:flex;align-items:center;justify-content:center;margin:30px 0;">
+                    <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,#d4af37);"></div>
+                    <div style="margin:0 10px;color:#d4af37;font-size:12px;">✦</div>
+                    <div style="width:60px;height:1px;background:linear-gradient(90deg,#d4af37,transparent);"></div>
+                </div>
+                <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:20px;color:#a0a8c0;font-style:italic;line-height:1.6;max-width:500px;margin:30px auto;letter-spacing:1px;">"Kenangan hari ini,<br>cerita indah untuk nanti."</div>
+                <div style="margin-top:40px;color:#d4af37;font-size:18px;letter-spacing:6px;">✦ ❦ ✦</div>
             </div>
-            <div style="font-weight:700;color:#1e3a5f;font-size:13px;margin-bottom:4px;line-height:1.3;word-wrap:break-word;">${nama}</div>
-            <div style="font-size:10px;color:#647092;margin-bottom:4px;line-height:1.3;word-wrap:break-word;">${ttl}</div>
-            <div style="font-size:9px;color:#9ca5c2;font-style:italic;line-height:1.3;word-wrap:break-word;">${kutipan}</div>
-        </div>
-    `;
-};
+        `;
+        renderContainer.appendChild(createPage(coverContent, '#0a1628'));
 
-        // ============ HALAMAN 1: COVER ============
-// COVER ELEGAN
-if (progressBar) progressBar.style.width = '10%';
-if (loadingText) loadingText.innerText = 'Membuat cover elegan...';
-
-const coverContent = `
-    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,#1a2847 0%,#0a1628 70%);"></div>
-    
-    <!-- Border Ganda Elegan -->
-    <div style="position:absolute;inset:30px;border:2px solid #d4af37;pointer-events:none;"></div>
-    <div style="position:absolute;inset:40px;border:1px solid rgba(212,175,55,0.5);pointer-events:none;"></div>
-    <div style="position:absolute;inset:50px;border:1px solid rgba(212,175,55,0.3);pointer-events:none;"></div>
-    
-    <!-- Ornamen Sudut -->
-    <div style="position:absolute;top:50px;left:50px;width:60px;height:60px;border-top:3px solid #d4af37;border-left:3px solid #d4af37;"></div>
-    <div style="position:absolute;top:50px;right:50px;width:60px;height:60px;border-top:3px solid #d4af37;border-right:3px solid #d4af37;"></div>
-    <div style="position:absolute;bottom:50px;left:50px;width:60px;height:60px;border-bottom:3px solid #d4af37;border-left:3px solid #d4af37;"></div>
-    <div style="position:absolute;bottom:50px;right:50px;width:60px;height:60px;border-bottom:3px solid #d4af37;border-right:3px solid #d4af37;"></div>
-    
-    <!-- Ornamen Tengah Atas -->
-    <div style="position:absolute;top:60px;left:50%;transform:translateX(-50%);text-align:center;color:#d4af37;font-size:24px;letter-spacing:8px;">✦ ❦ ✦</div>
-    
-    <!-- Konten Utama -->
-    <div style="position:relative;z-index:10;text-align:center;padding:80px 60px;">
-        
-        <!-- Judul Utama -->
-        <div style="font-family:'Playfair Display',Georgia,serif;font-size:72px;color:#e8b4a8;letter-spacing:8px;font-weight:700;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,0.5);">
-            ALBUM
-        </div>
-        <div style="font-family:'Playfair Display',Georgia,serif;font-size:72px;color:#e8b4a8;letter-spacing:8px;font-weight:700;margin-bottom:30px;text-shadow:2px 2px 4px rgba(0,0,0,0.5);">
-            KENANGAN
-        </div>
-        
-        <!-- Divider Elegan -->
-        <div style="display:flex;align-items:center;justify-content:center;margin:30px 0;">
-            <div style="width:150px;height:1px;background:linear-gradient(90deg,transparent,#d4af37);"></div>
-            <div style="margin:0 20px;color:#d4af37;font-size:20px;">❦</div>
-            <div style="width:150px;height:1px;background:linear-gradient(90deg,#d4af37,transparent);"></div>
-        </div>
-        
-        <!-- Nama Sekolah -->
-        <div style="font-family:'Playfair Display',Georgia,serif;font-size:26px;color:#d0d5e0;letter-spacing:4px;margin:20px 0;font-weight:600;">
-            SMP NEGERI 110 JAKARTA
-        </div>
-        
-        <!-- Tahun Ajaran -->
-        <div style="font-size:18px;color:#a0a8c0;letter-spacing:3px;margin:15px 0;">
-            Tahun Ajaran 2025 / 2026
-        </div>
-        
-        <!-- Divider Kecil -->
-        <div style="display:flex;align-items:center;justify-content:center;margin:40px 0;">
-            <div style="width:80px;height:1px;background:linear-gradient(90deg,transparent,#d4af37);"></div>
-            <div style="margin:0 15px;color:#d4af37;font-size:14px;">• • •</div>
-            <div style="width:80px;height:1px;background:linear-gradient(90deg,#d4af37,transparent);"></div>
-        </div>
-        
-        <!-- Nama Kelas -->
-        <div style="font-family:'Playfair Display',Georgia,serif;font-size:48px;color:#d4af37;letter-spacing:6px;font-weight:700;margin:20px 0;text-shadow:2px 2px 4px rgba(0,0,0,0.5);">
-            Kelas ${currentKelas.nama}
-        </div>
-        
-        <!-- Divider Kecil -->
-        <div style="display:flex;align-items:center;justify-content:center;margin:30px 0;">
-            <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,#d4af37);"></div>
-            <div style="margin:0 10px;color:#d4af37;font-size:12px;">✦</div>
-            <div style="width:60px;height:1px;background:linear-gradient(90deg,#d4af37,transparent);"></div>
-        </div>
-        
-        <!-- Kutipan -->
-        <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:20px;color:#a0a8c0;font-style:italic;line-height:1.6;max-width:500px;margin:30px auto;letter-spacing:1px;">
-            "Kenangan hari ini,<br>cerita indah untuk nanti."
-        </div>
-        
-        <!-- Ornamen Tengah Bawah -->
-        <div style="margin-top:40px;color:#d4af37;font-size:18px;letter-spacing:6px;">✦ ❦ ✦</div>
-    </div>
-`;
-
-renderContainer.appendChild(createPage(coverContent, '#0a1628'));
-
-        // ============ HALAMAN 2-7: DAFTAR MURID ============
+        // DAFTAR MURID
         const siswaList = DATA_SISWA[currentKelas.kode];
         const pages = [
             { title: 'DAFTAR MURID 1 - 6', siswa: siswaList.slice(0, 6), pageNum: 3 },
@@ -2249,123 +2130,88 @@ renderContainer.appendChild(createPage(coverContent, '#0a1628'));
             if (progressBar) progressBar.style.width = `${10 + (i + 1) * 12}%`;
         }
 
-        // ============ HALAMAN 8: PENUTUP ============
-// PENUTUP ELEGAN (Simetris dengan Cover)
-if (loadingText) loadingText.innerText = 'Membuat halaman penutup...';
+        // PENUTUP ELEGAN
+        if (loadingText) loadingText.innerText = 'Membuat halaman penutup...';
 
-const closingContent = `
-    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,#1a2847 0%,#0a1628 70%);"></div>
-    
-    <!-- Border Ganda Elegan -->
-    <div style="position:absolute;inset:30px;border:2px solid #d4af37;pointer-events:none;"></div>
-    <div style="position:absolute;inset:40px;border:1px solid rgba(212,175,55,0.5);pointer-events:none;"></div>
-    <div style="position:absolute;inset:50px;border:1px solid rgba(212,175,55,0.3);pointer-events:none;"></div>
-    
-    <!-- Ornamen Sudut -->
-    <div style="position:absolute;top:50px;left:50px;width:60px;height:60px;border-top:3px solid #d4af37;border-left:3px solid #d4af37;"></div>
-    <div style="position:absolute;top:50px;right:50px;width:60px;height:60px;border-top:3px solid #d4af37;border-right:3px solid #d4af37;"></div>
-    <div style="position:absolute;bottom:50px;left:50px;width:60px;height:60px;border-bottom:3px solid #d4af37;border-left:3px solid #d4af37;"></div>
-    <div style="position:absolute;bottom:50px;right:50px;width:60px;height:60px;border-bottom:3px solid #d4af37;border-right:3px solid #d4af37;"></div>
-    
-    <!-- Ornamen Tengah Atas -->
-    <div style="position:absolute;top:60px;left:50%;transform:translateX(-50%);text-align:center;color:#d4af37;font-size:24px;letter-spacing:8px;">✦ ❦ </div>
-    
-    <!-- Konten Utama -->
-    <div style="position:relative;z-index:10;text-align:center;padding:80px 60px;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;">
-        
-        <!-- Divider Atas -->
-        <div style="display:flex;align-items:center;justify-content:center;margin-bottom:40px;">
-            <div style="width:120px;height:1px;background:linear-gradient(90deg,transparent,#d4af37);"></div>
-            <div style="margin:0 15px;color:#d4af37;font-size:16px;">❦</div>
-            <div style="width:120px;height:1px;background:linear-gradient(90deg,#d4af37,transparent);"></div>
-        </div>
-        
-        <!-- Judul Penutup -->
-        <div style="font-family:'Playfair Display',Georgia,serif;font-size:48px;color:#d4af37;letter-spacing:8px;font-weight:700;margin-bottom:30px;text-shadow:2px 2px 4px rgba(0,0,0,0.5);">
-            PENUTUP
-        </div>
-        
-        <!-- Divider Tengah -->
-        <div style="display:flex;align-items:center;justify-content:center;margin:20px 0 40px 0;">
-            <div style="width:80px;height:1px;background:linear-gradient(90deg,transparent,#d4af37);"></div>
-            <div style="margin:0 10px;color:#d4af37;font-size:12px;">• • •</div>
-            <div style="width:80px;height:1px;background:linear-gradient(90deg,#d4af37,transparent);"></div>
-        </div>
-        
-        <!-- Kutipan -->
-        <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;color:#e8b4a8;font-style:italic;line-height:1.8;max-width:600px;margin:0 auto 40px auto;letter-spacing:1px;text-shadow:1px 1px 2px rgba(0,0,0,0.3);">
-            "Kenangan ini akan selalu tersimpan rapi di hati.<br>Sampai jumpa di jalan kesuksesan masing-masing."
-        </div>
-        
-        <!-- Divider Bawah -->
-        <div style="display:flex;align-items:center;justify-content:center;margin:30px 0;">
-            <div style="width:100px;height:1px;background:linear-gradient(90deg,transparent,#d4af37);"></div>
-            <div style="margin:0 15px;color:#d4af37;font-size:14px;">✦</div>
-            <div style="width:100px;height:1px;background:linear-gradient(90deg,#d4af37,transparent);"></div>
-        </div>
-        
-        <!-- Nama Kelas -->
-        <div style="font-family:'Playfair Display',Georgia,serif;font-size:42px;color:#d4af37;letter-spacing:6px;font-weight:700;margin:20px 0;text-shadow:2px 2px 4px rgba(0,0,0,0.5);">
-            — Kelas ${currentKelas.nama} —
-        </div>
-        
-        <!-- Tahun -->
-        <div style="font-size:18px;color:#a0a8c0;letter-spacing:4px;margin-top:15px;">
-            Tahun 2026
-        </div>
-        
-        <!-- Ornamen Tengah Bawah -->
-        <div style="margin-top:40px;color:#d4af37;font-size:18px;letter-spacing:6px;">✦ ❦ ✦</div>
-    </div>
-`;
+        const closingContent = `
+            <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,#1a2847 0%,#0a1628 70%);"></div>
+            <div style="position:absolute;inset:30px;border:2px solid #d4af37;pointer-events:none;"></div>
+            <div style="position:absolute;inset:40px;border:1px solid rgba(212,175,55,0.5);pointer-events:none;"></div>
+            <div style="position:absolute;inset:50px;border:1px solid rgba(212,175,55,0.3);pointer-events:none;"></div>
+            <div style="position:absolute;top:50px;left:50px;width:60px;height:60px;border-top:3px solid #d4af37;border-left:3px solid #d4af37;"></div>
+            <div style="position:absolute;top:50px;right:50px;width:60px;height:60px;border-top:3px solid #d4af37;border-right:3px solid #d4af37;"></div>
+            <div style="position:absolute;bottom:50px;left:50px;width:60px;height:60px;border-bottom:3px solid #d4af37;border-left:3px solid #d4af37;"></div>
+            <div style="position:absolute;bottom:50px;right:50px;width:60px;height:60px;border-bottom:3px solid #d4af37;border-right:3px solid #d4af37;"></div>
+            <div style="position:absolute;top:60px;left:50%;transform:translateX(-50%);text-align:center;color:#d4af37;font-size:24px;letter-spacing:8px;">✦ ❦ </div>
+            <div style="position:relative;z-index:10;text-align:center;padding:80px 60px;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;">
+                <div style="display:flex;align-items:center;justify-content:center;margin-bottom:40px;">
+                    <div style="width:120px;height:1px;background:linear-gradient(90deg,transparent,#d4af37);"></div>
+                    <div style="margin:0 15px;color:#d4af37;font-size:16px;">❦</div>
+                    <div style="width:120px;height:1px;background:linear-gradient(90deg,#d4af37,transparent);"></div>
+                </div>
+                <div style="font-family:'Playfair Display',Georgia,serif;font-size:48px;color:#d4af37;letter-spacing:8px;font-weight:700;margin-bottom:30px;text-shadow:2px 2px 4px rgba(0,0,0,0.5);">PENUTUP</div>
+                <div style="display:flex;align-items:center;justify-content:center;margin:20px 0 40px 0;">
+                    <div style="width:80px;height:1px;background:linear-gradient(90deg,transparent,#d4af37);"></div>
+                    <div style="margin:0 10px;color:#d4af37;font-size:12px;">• • •</div>
+                    <div style="width:80px;height:1px;background:linear-gradient(90deg,#d4af37,transparent);"></div>
+                </div>
+                <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;color:#e8b4a8;font-style:italic;line-height:1.8;max-width:600px;margin:0 auto 40px auto;letter-spacing:1px;text-shadow:1px 1px 2px rgba(0,0,0,0.3);">"Kenangan ini akan selalu tersimpan rapi di hati.<br>Sampai jumpa di jalan kesuksesan masing-masing."</div>
+                <div style="display:flex;align-items:center;justify-content:center;margin:30px 0;">
+                    <div style="width:100px;height:1px;background:linear-gradient(90deg,transparent,#d4af37);"></div>
+                    <div style="margin:0 15px;color:#d4af37;font-size:14px;">✦</div>
+                    <div style="width:100px;height:1px;background:linear-gradient(90deg,#d4af37,transparent);"></div>
+                </div>
+                <div style="font-family:'Playfair Display',Georgia,serif;font-size:42px;color:#d4af37;letter-spacing:6px;font-weight:700;margin:20px 0;text-shadow:2px 2px 4px rgba(0,0,0,0.5);">— Kelas ${currentKelas.nama} —</div>
+                <div style="font-size:18px;color:#a0a8c0;letter-spacing:4px;margin-top:15px;">Tahun 2026</div>
+                <div style="margin-top:40px;color:#d4af37;font-size:18px;letter-spacing:6px;">✦ ❦ ✦</div>
+            </div>
+        `;
+        renderContainer.appendChild(createPage(closingContent, '#0a1628'));
 
-renderContainer.appendChild(createPage(closingContent, '#0a1628'));
+        // PRELOAD GAMBAR
+        const images = renderContainer.querySelectorAll('img');
+        console.log(`⏳ Preloading ${images.length} gambar...`);
 
-// PRELOAD AGRESIF DENGAN LOGGING
-const images = renderContainer.querySelectorAll('img');
-console.log(`⏳ Preloading ${images.length} gambar...`);
+        let loadedCount = 0, failedCount = 0;
 
-let loadedCount = 0, failedCount = 0;
+        await Promise.all(Array.from(images).map((img, idx) => {
+            return new Promise(resolve => {
+                if (img.complete && img.naturalWidth > 0) {
+                    console.log(`✅ Gambar ${idx+1} sudah loaded`);
+                    loadedCount++;
+                    resolve();
+                    return;
+                }
 
-await Promise.all(Array.from(images).map((img, idx) => {
-    return new Promise(resolve => {
-        if (img.complete && img.naturalWidth > 0) {
-            console.log(`✅ Gambar ${idx+1} sudah loaded`);
-            loadedCount++;
-            resolve();
-            return;
-        }
+                const timeout = setTimeout(() => {
+                    console.warn(`⚠️ Gambar ${idx+1} timeout: ${img.src.substring(0, 60)}...`);
+                    failedCount++;
+                    resolve();
+                }, 15000);
 
-        const timeout = setTimeout(() => {
-            console.warn(`⚠️ Gambar ${idx+1} timeout: ${img.src.substring(0, 60)}...`);
-            failedCount++;
-            resolve();
-        }, 15000);
+                img.onload = () => {
+                    clearTimeout(timeout);
+                    console.log(`✅ Gambar ${idx+1} berhasil (${img.naturalWidth}x${img.naturalHeight})`);
+                    loadedCount++;
+                    resolve();
+                };
 
-        img.onload = () => {
-            clearTimeout(timeout);
-            console.log(`✅ Gambar ${idx+1} berhasil (${img.naturalWidth}x${img.naturalHeight})`);
-            loadedCount++;
-            resolve();
-        };
+                img.onerror = () => {
+                    clearTimeout(timeout);
+                    console.error(`❌ Gambar ${idx+1} GAGAL: ${img.src}`);
+                    failedCount++;
+                    resolve();
+                };
 
-        img.onerror = () => {
-            clearTimeout(timeout);
-            console.error(`❌ Gambar ${idx+1} GAGAL: ${img.src}`);
-            failedCount++;
-            resolve();
-        };
+                const src = img.src;
+                img.src = src + (src.includes('?') ? '&' : '?') + 't=' + Date.now() + '_' + idx;
+            });
+        }));
 
-        // Force reload dengan timestamp anti-cache
-        const src = img.src;
-        img.src = src + (src.includes('?') ? '&' : '?') + 't=' + Date.now() + '_' + idx;
-    });
-}));
+        console.log(`📊 Preload selesai: ${loadedCount} berhasil, ${failedCount} gagal`);
+        await new Promise(r => setTimeout(r, 2000));
 
-console.log(`📊 Preload selesai: ${loadedCount} berhasil, ${failedCount} gagal`);
-await new Promise(r => setTimeout(r, 2000));
-
-        // Render setiap halaman satu per satu
+        // RENDER
         const canvasList = [];
         const pageElements = renderContainer.children;
 
@@ -2391,13 +2237,11 @@ await new Promise(r => setTimeout(r, 2000));
             if (progressBar) progressBar.style.width = `${90 + (i + 1) * 1}%`;
         }
 
-        // Hapus container
         document.body.removeChild(renderContainer);
 
         if (progressBar) progressBar.style.width = '95%';
         if (loadingText) loadingText.innerText = 'Menyimpan PDF...';
 
-        // Buat PDF
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF({
             orientation: 'landscape',
@@ -2430,45 +2274,219 @@ await new Promise(r => setTimeout(r, 2000));
     }
 }
 
+// =================================================================
+// FOTO WALI KELAS
+// =================================================================
+async function loadFotoWaliKelas() {
+    if (!currentKelas) return;
+    
+    console.log('🔄 Loading foto wali untuk kelas:', currentKelas.kode);
+    
+    try {
+        const response = await fetch(GOOGLE_SHEETS_API_URL + `?action=getFotoWali&kelas=${currentKelas.kode}`);
+        const result = await response.json();
+        
+        console.log('📥 Result:', result);
+        
+        if (result.status === 'success') {
+            fotoWaliList = result.data || [];
+            console.log('✅ Foto wali loaded:', fotoWaliList.length, 'foto');
+            renderFotoWaliGrid();
+        } else {
+            console.error('❌ Gagal load foto wali:', result.message);
+        }
+    } catch (error) {
+        console.error('❌ Error load foto wali:', error);
+    }
+}
 
+function renderFotoWaliGrid() {
+    const grid = document.getElementById('fotoWaliGrid');
+    if (!grid) return;
+    
+    grid.innerHTML = '';
+    
+    const maxFoto = Math.min(fotoWaliList.length, 2);
+    
+    for (let i = 0; i < maxFoto; i++) {
+        const fotoItem = document.createElement('div');
+        fotoItem.className = 'foto-item-final';
+        fotoItem.innerHTML = `
+            <img src="${fotoWaliList[i]}" alt="Foto Wali ${i + 1}" crossorigin="anonymous">
+            <button class="foto-delete-btn-final" onclick="deleteFotoWali(${i})" title="Hapus foto">
+                <i class="fa fa-times"></i>
+            </button>
+        `;
+        grid.appendChild(fotoItem);
+    }
+    
+    const remaining = 2 - maxFoto;
+    for (let i = 0; i < remaining; i++) {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'foto-placeholder-final';
+        placeholder.innerHTML = '<i class="fa fa-image" style="font-size:32px;color:rgba(212,175,55,0.3);margin-right:10px;"></i>Belum ada foto';
+        grid.appendChild(placeholder);
+    }
+}
 
+async function handleFotoWaliUpload(event) {
+    const files = event.target.files;
+    
+    console.log('📤 Upload foto wali:', files.length, 'file');
+    
+    if (files.length > 0 && currentKelas) {
+        for (let file of files) {
+            if (!file.type.startsWith('image/')) {
+                console.warn('⚠️ File bukan gambar:', file.name);
+                continue;
+            }
+            
+            try {
+                console.log('📤 Mengupload:', file.name);
+                
+                const base64 = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+                
+                const response = await fetch(GOOGLE_SHEETS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({
+                        action: 'uploadFotoWali',
+                        kelas: currentKelas.kode,
+                        filename: file.name,
+                        mimeType: file.type,
+                        base64: base64.split(',')[1]
+                    })
+                });
+                
+                const result = await response.json();
+                console.log('📥 Response:', result);
+                
+                if (result.status === 'success') {
+                    console.log('✅ Foto berhasil diupload:', result.url);
+                    fotoWaliList.push(result.url);
+                    renderFotoWaliGrid();
+                } else {
+                    alert('Gagal upload: ' + result.message);
+                }
+            } catch (error) {
+                console.error('❌ Error upload:', error);
+                alert('Terjadi kesalahan saat upload');
+            }
+        }
+    }
+    
+    event.target.value = '';
+}
 
-
-
-
+async function deleteFotoWali(index) {
+    if (!confirm('Hapus foto ini?')) return;
+    
+    try {
+        const response = await fetch(GOOGLE_SHEETS_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({
+                action: 'deleteFotoWali',
+                kelas: currentKelas.kode,
+                index: index
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+            fotoWaliList.splice(index, 1);
+            renderFotoWaliGrid();
+        } else {
+            alert('Gagal hapus: ' + result.message);
+        }
+    } catch (error) {
+        console.error('❌ Error delete:', error);
+        alert('Terjadi kesalahan saat hapus');
+    }
+}
 
 // =================================================================
-// ===== EVENT LISTENERS =====
+// LOAD DATA SISWA
 // =================================================================
+async function muatDataSiswa() {
+    if (!currentKelas) return;
+    
+    document.querySelectorAll('.student-card').forEach(card => {
+        izinkanEdit(card);
+    });
 
+    try {
+        const response = await fetch(GOOGLE_SHEETS_API_URL + "?action=getAll&kelas=" + currentKelas.kode);
+        const result = await response.json();
+
+        if (result.status !== "success") {
+            console.warn("Gagal ambil data dari server, izinkan edit semua");
+            return;
+        }
+
+        result.data.forEach(siswa => {
+            const card = document.querySelector(`.student-card[data-id="${siswa.id}"]`);
+            if (!card) return;
+            const img = card.querySelector('.photo-frame img');
+
+            if (siswa.foto && siswa.foto !== "") {
+                img.src = konversiUrlDrive(siswa.foto) + "&t=" + Date.now();
+                img.onerror = function() {
+                    const fileId = siswa.foto.match(/[-\w]{25,}/)?.[0];
+                    if (fileId) this.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000&t=${Date.now()}`;
+                };
+            }
+
+            if (siswa.nama) card.querySelector('.student-name').textContent = siswa.nama;
+            if (siswa.ttl) card.querySelector('.student-bio').textContent = siswa.ttl;
+            if (siswa.kutipan) card.querySelector('.student-quote').textContent = `"${siswa.kutipan}"`;
+
+            if (siswa.nama && siswa.nama.trim() !== "") {
+                kunciTotal(card);
+            } else {
+                izinkanEdit(card);
+            }
+
+            cekFoto(card);
+        });
+
+    } catch (error) {
+        console.error("Error muatDataSiswa:", error);
+    }
+}
+
+// =================================================================
+// EVENT LISTENERS
+// =================================================================
 document.addEventListener('click', function(e) {
-    // Cover click
     if (e.target.closest('#cover')) {
         bukaCover();
         return;
     }
     
-    // Back to landing
     if (e.target.closest('#backToLanding')) {
         kembaliKeLanding();
         return;
     }
     
-    // Cover button
     if (e.target.closest('#coverBtn')) {
         e.stopPropagation();
         tutupCover();
         return;
     }
     
-    // TOC items
     const tocItem = e.target.closest('.toc-item[data-spread]');
     if (tocItem) {
         goToSpread(parseInt(tocItem.dataset.spread, 10));
         return;
     }
     
-    // Photo frame
     if (e.target.closest('#cover')) return;
     const frame = e.target.closest('.photo-frame');
     if (frame) {
@@ -2482,7 +2500,6 @@ document.addEventListener('click', function(e) {
         return;
     }
     
-    // Save button
     if (e.target.classList.contains('btn-simpan-data')) {
         const btn = e.target;
         const card = btn.closest('.student-card');
@@ -2523,7 +2540,7 @@ document.addEventListener('click', function(e) {
             }
         })
         .catch(err => {
-            alert(' Koneksi gagal: ' + err);
+            alert('❌ Koneksi gagal: ' + err);
             btn.textContent = 'Simpan Data';
             btn.disabled = false;
         });
@@ -2588,214 +2605,21 @@ document.addEventListener('change', e => {
             })
             .catch(() => {
                 card.style.opacity = '1';
-                alert(' Kesalahan koneksi');
+                alert('❌ Kesalahan koneksi');
             });
         };
         reader.readAsDataURL(file);
     }
 });
 
-async function muatDataSiswa() {
-    if (!currentKelas) return;
-    
-    document.querySelectorAll('.student-card').forEach(card => {
-        izinkanEdit(card);
-    });
-
-    try {
-        const response = await fetch(GOOGLE_SHEETS_API_URL + "?action=getAll&kelas=" + currentKelas.kode);
-        const result = await response.json();
-
-        if (result.status !== "success") {
-            console.warn("Gagal ambil data dari server, izinkan edit semua");
-            return;
-        }
-
-        result.data.forEach(siswa => {
-            const card = document.querySelector(`.student-card[data-id="${siswa.id}"]`);
-            if (!card) return;
-            const img = card.querySelector('.photo-frame img');
-
-            if (siswa.foto && siswa.foto !== "") {
-                img.src = konversiUrlDrive(siswa.foto) + "&t=" + Date.now();
-                img.onerror = function() {
-                    const fileId = siswa.foto.match(/[-\w]{25,}/)?.[0];
-                    if (fileId) this.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000&t=${Date.now()}`;
-                };
-            }
-
-            if (siswa.nama) card.querySelector('.student-name').textContent = siswa.nama;
-            if (siswa.ttl) card.querySelector('.student-bio').textContent = siswa.ttl;
-            if (siswa.kutipan) card.querySelector('.student-quote').textContent = `"${siswa.kutipan}"`;
-
-            if (siswa.nama && siswa.nama.trim() !== "") {
-                kunciTotal(card);
-            } else {
-                izinkanEdit(card);
-            }
-
-            cekFoto(card);
-        });
-
-    } catch (error) {
-        console.error("Error muatDataSiswa:", error);
-    }
-}
-
 // =================================================================
-// ===== INIT =====
+// INIT
 // =================================================================
-
 window.addEventListener('DOMContentLoaded', () => {
     createStars();
     createSpiralHoles();
     initLandingPage();
 });
-
-// Handle Upload Foto Wali Kelas
-
-let fotoWaliList = [];
-
-async function loadFotoWaliKelas() {
-    if (!currentKelas) return;
-    
-    console.log('🔄 Loading foto wali untuk kelas:', currentKelas.kode);
-    
-    try {
-        const response = await fetch(GOOGLE_SHEETS_API_URL + `?action=getFotoWali&kelas=${currentKelas.kode}`);
-        const result = await response.json();
-        
-        console.log(' Result:', result);
-        
-        if (result.status === 'success') {
-            fotoWaliList = result.data || [];
-            console.log('✅ Foto wali loaded:', fotoWaliList.length, 'foto');
-            renderFotoWaliGrid();
-        } else {
-            console.error('❌ Gagal load foto wali:', result.message);
-        }
-    } catch (error) {
-        console.error('❌ Error load foto wali:', error);
-    }
-}
-
-function renderFotoWaliGrid() {
-    const grid = document.getElementById('fotoWaliGrid');
-    if (!grid) return;
-    
-    grid.innerHTML = '';
-    
-    const maxFoto = Math.min(fotoWaliList.length, 2);
-    
-    // Render foto yang ada
-    for (let i = 0; i < maxFoto; i++) {
-        const fotoItem = document.createElement('div');
-        fotoItem.className = 'foto-item-final';
-        fotoItem.innerHTML = `
-            <img src="${fotoWaliList[i]}" alt="Foto Wali ${i + 1}" crossorigin="anonymous">
-            <button class="foto-delete-btn-final" onclick="deleteFotoWali(${i})" title="Hapus foto">
-                <i class="fa fa-times"></i>
-            </button>
-        `;
-        grid.appendChild(fotoItem);
-    }
-    
-    // Placeholder jika belum ada 2 foto
-    const remaining = 2 - maxFoto;
-    for (let i = 0; i < remaining; i++) {
-        const placeholder = document.createElement('div');
-        placeholder.className = 'foto-placeholder-final';
-        placeholder.innerHTML = '<i class="fa fa-image" style="font-size:32px;color:rgba(212,175,55,0.3);margin-right:10px;"></i>Belum ada foto';
-        grid.appendChild(placeholder);
-    }
-}
-
-// Handle upload foto wali
-async function handleFotoWaliUpload(event) {
-    const files = event.target.files;
-    
-    console.log('📤 Upload foto wali:', files.length, 'file');
-    
-    if (files.length > 0 && currentKelas) {
-        for (let file of files) {
-            if (!file.type.startsWith('image/')) {
-                console.warn('⚠️ File bukan gambar:', file.name);
-                continue;
-            }
-            
-            try {
-                console.log(' Mengupload:', file.name);
-                
-                const base64 = await new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => resolve(e.target.result);
-                    reader.onerror = reject;
-                    reader.readAsDataURL(file);
-                });
-                
-                const response = await fetch(GOOGLE_SHEETS_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({
-                        action: 'uploadFotoWali',
-                        kelas: currentKelas.kode,
-                        filename: file.name,
-                        mimeType: file.type,
-                        base64: base64.split(',')[1]
-                    })
-                });
-                
-                const result = await response.json();
-                console.log('📥 Response:', result);
-                
-                if (result.status === 'success') {
-                    console.log('✅ Foto berhasil diupload:', result.url);
-                    fotoWaliList.push(result.url);
-                    renderFotoWaliGrid();
-                } else {
-                    alert('Gagal upload: ' + result.message);
-                }
-            } catch (error) {
-                console.error(' Error upload:', error);
-                alert('Terjadi kesalahan saat upload');
-            }
-        }
-    }
-    
-    event.target.value = '';
-}
-
-// Hapus foto wali
-async function deleteFotoWali(index) {
-    if (!confirm('Hapus foto ini?')) return;
-    
-    try {
-        const response = await fetch(GOOGLE_SHEETS_API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify({
-                action: 'deleteFotoWali',
-                kelas: currentKelas.kode,
-                index: index
-            })
-        });
-        
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            fotoWaliList.splice(index, 1);
-            renderFotoWaliGrid();
-        } else {
-            alert('Gagal hapus: ' + result.message);
-        }
-    } catch (error) {
-        console.error('❌ Error delete:', error);
-        alert('Terjadi kesalahan saat hapus');
-    }
-}
-
-
-
 </script>
 </body>
 </html>
