@@ -81,7 +81,7 @@
 
         .landing-subtitle {
             font-family: 'Inter', sans-serif;
-            font-size: clamp(14px, 2vw, 18px);
+            font-size: clamp(24px, 2vw, 28px);
             color: #d0d5e0;
             text-align: center;
             letter-spacing: 2px;
@@ -91,11 +91,11 @@
 
         .landing-school {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(16px, 2.2vw, 22px);
+            font-size: clamp(20px, 2.2vw, 26px);
             color: #d4af37;
             text-align: center;
             margin-bottom: 50px;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             animation: fadeInDown 1s ease-out 0.4s backwards;
         }
 
@@ -104,15 +104,41 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .kelas-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
-            max-width: 1100px;
-            width: 100%;
-            padding: 20px;
-            animation: fadeInUp 1s ease-out 0.6s backwards;
-        }
+.kelas-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 kolom dalam 1 baris */
+    gap: 20px;
+    max-width: 1400px; /* Lebih lebar untuk muat 6 kartu */
+    width: 100%;
+    padding: 20px 40px;
+    animation: fadeInUp 1s ease-out 0.6s backwards;
+}
+
+/* Tablet: 3 kolom per baris */
+@media (max-width: 1024px) {
+    .kelas-grid {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 900px;
+    }
+}
+
+/* HP: 2 kolom per baris */
+@media (max-width: 768px) {
+    .kelas-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        padding: 20px;
+    }
+}
+
+/* HP Kecil: 1 kolom */
+@media (max-width: 480px) {
+    .kelas-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 15px;
+    }
+}
 
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
@@ -583,18 +609,112 @@
             z-index: 10;
         }
 
-        .toc-item {
-            cursor: pointer;
-            border-radius: 6px;
-            padding: 6px 8px;
-            margin-left: -8px;
-            transition: background-color 0.2s ease, transform 0.2s ease;
-        }
+        /* Container Daftar Isi */
+.space-y-6 {
+    position: relative;
+    padding: 20px 0;
+}
 
-        .toc-item:hover {
-            background-color: rgba(201, 162, 39, 0.08);
-            transform: translateX(4px);
-        }
+.space-y-6::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #d4af37, transparent);
+}
+
+.space-y-6 > * {
+    margin-top: clamp(15px, 1.8vw, 18px);
+    position: relative;
+    z-index: 10;
+}
+
+/* Item Daftar Isi */
+.toc-item {
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-left: -8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    border: 1px solid transparent;
+}
+
+.toc-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 0;
+    background: linear-gradient(180deg, #d4af37, #e8b4a8);
+    transition: height 0.3s ease;
+    border-radius: 2px;
+}
+
+.toc-item:hover {
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.08), rgba(212, 175, 55, 0.02));
+    transform: translateX(8px);
+    border-color: rgba(212, 175, 55, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.toc-item:hover::before {
+    height: 60%;
+}
+
+.toc-item:hover .toc-number {
+    color: #e8b4a8;
+    text-shadow: 0 0 10px rgba(232, 180, 168, 0.3);
+}
+
+.toc-item:hover .toc-title {
+    color: #f0c5b8;
+    letter-spacing: 1px;
+}
+
+/* Nomor Halaman */
+.toc-number {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 700;
+    color: #4a536b;
+    transition: all 0.3s ease;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    min-width: 120px;
+    text-align: right;
+}
+
+/* Judul Bagian */
+.toc-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(16px, 2vw, 20px);
+    font-weight: 600;
+    color: #c9a227;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Garis pemisah antar item */
+.toc-item:not(:last-child) {
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.toc-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    right: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+}
 
         .grid-2 {
             display: grid;
@@ -1079,6 +1199,120 @@
             .grid-2 { grid-template-columns: 1fr 1fr !important; gap: 15px !important; }
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
         }
+		
+/* Tombol Upload - TANPA GARIS PUTUS-PUTUS */
+/* Tombol Upload - Hanya Icon, Tanpa Kotak */
+.btn-upload-wali {
+    position: absolute;
+    top: 40px; /* Turun dari 20px ke 40px agar tidak kena garis */
+    right: 35px;
+    background: transparent; /* Hapus background kotak */
+    border: none; /* Hapus border */
+    border-radius: 0;
+    padding: 8px;
+    color: #d4af37;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 20;
+}
+
+.btn-upload-wali:hover {
+    color: #e8b4a8;
+    transform: scale(1.15);
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.btn-upload-wali i {
+    font-size: 22px; /* Icon lebih besar */
+}
+
+.btn-upload-wali span {
+    display: none; /* Sembunyikan teks "Upload Foto" */
+}
+/* Grid Foto - VERTIKAL (ATAS-BAWAH) */
+.foto-wali-grid-final {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 10px 60px;
+    height: calc(100% - 90px);
+    overflow: hidden;
+}
+
+/* Item Foto - LEBAR PENUH */
+.foto-item-final {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 3px solid #d4af37;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    max-width: 700px;
+    flex: 1;
+    min-height: 0;
+    background: #0d1a2e;
+}
+
+.foto-item-final img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Tombol Hapus */
+.foto-delete-btn-final {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    background: rgba(220, 38, 38, 0.9);
+    border: 2px solid white;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    z-index: 10;
+}
+
+.foto-item-final:hover .foto-delete-btn-final {
+    opacity: 1;
+}
+
+.foto-delete-btn-final:hover {
+    background: #dc2626;
+    transform: scale(1.1);
+}
+
+/* Placeholder */
+.foto-placeholder-final {
+    width: 100%;
+    max-width: 700px;
+    flex: 1;
+    min-height: 80px;
+    border: 2px solid rgba(212, 175, 55, 0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #7a85a3;
+    font-size: 13px;
+    font-style: italic;
+    background: rgba(212, 175, 55, 0.03);
+}
+
+
     </style>
 </head>
 <body>
@@ -1311,13 +1545,24 @@
                     <div class="corner-dot dot-br"></div>
                 </div>
                     
-                <div class="page-content active" id="right-2">
-                    <h2>FOTO MURID <span id="fotoKelasTitle">KELAS VIII-F</span> <br>BERSAMA WALI KELAS</h2><br>
-                    <div class="empty-box h-[calc(100%-120px)]">
-                        Siap diisi konten sesuai kebutuhan
-                    </div>
-                    <div class="page-number">- 2 -</div>
-                </div>
+<div class="page-content active" id="right-2">
+    <h2>FOTO MURID <span id="fotoKelasTitle">KELAS VIII-F</span> <br>BERSAMA WALI KELAS</h2>
+    
+    <!-- Tombol Upload di Kanan Atas -->
+    <button class="btn-upload-wali" onclick="document.getElementById('fotoWaliInput').click()" title="Upload Foto">
+        <i class="fa fa-camera"></i>
+        <span></span>
+    </button>
+    
+    <!-- Grid Foto - 2 Foto Berdampingan -->
+    <div class="foto-wali-grid-final" id="fotoWaliGrid">
+        <!-- Foto akan dirender di sini -->
+    </div>
+    
+    <input type="file" id="fotoWaliInput" accept="image/*" style="display: none;" onchange="handleFotoWaliUpload(event)">
+    
+    <div class="page-number">- 2 -</div>
+</div>
 
                 <div class="page-content" id="right-4">
                     <h2>DAFTAR MURID 7 - 12</h2>
@@ -1436,12 +1681,12 @@
 // =================================================================
 
 const KELAS_LIST = [
-    { kode: 'VIII-A', nama: 'VIII-A', icon: '🌟', jumlah: 36, tagline: 'Kelas Penuh Semangat' },
-    { kode: 'VIII-B', nama: 'VIII-B', icon: '🎯', jumlah: 36, tagline: 'Kelas Kreatif & Inovatif' },
-    { kode: 'VIII-C', nama: 'VIII-C', icon: '🎨', jumlah: 36, tagline: 'Kelas Seni & Budaya' },
-    { kode: 'VIII-D', nama: 'VIII-D', icon: '⭐', jumlah: 36, tagline: 'Kelas Sains & Teknologi' },
-    { kode: 'VIII-E', nama: 'VIII-E', icon: '📚', jumlah: 36, tagline: 'Kelas Literasi & Wawasan' },
-    { kode: 'VIII-F', nama: 'VIII-F', icon: '⭐', jumlah: 36, tagline: 'Kelas Berprestasi' }
+    { kode: 'VIII-A', nama: 'VIII-A', icon: '🛡️', jumlah: 36, tagline: '' },
+    { kode: 'VIII-B', nama: 'VIII-B', icon: '📖', jumlah: 36, tagline: '' },
+    { kode: 'VIII-C', nama: 'VIII-C', icon: '🔢', jumlah: 36, tagline: '' },
+    { kode: 'VIII-D', nama: 'VIII-D', icon: '⚛️', jumlah: 36, tagline: '' },
+    { kode: 'VIII-E', nama: 'VIII-E', icon: '🗺️', jumlah: 36, tagline: '' },
+    { kode: 'VIII-F', nama: 'VIII-F', icon: '🔤', jumlah: 35, tagline: '' }
 ];
 
 const DATA_SISWA = {
@@ -1477,7 +1722,7 @@ let currentSpread = 1;
 const totalSpread = 7;
 
 // URL Apps Script Anda
-const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbzqut4skfuHfX7CU3IlPlRKU9mUGbY85OpFZlkq6HdgSOCas0RdtjW6f8-tvGk3Oj6lhg/exec";
+const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbyu-0mWLIOJILNRHXJnspmhd-jGQY8aUqHgnibgkaN7L3Dj5NhMA_7ZL-yTsi1oiIvG-A/exec";
 
 // =================================================================
 // ===== HELPER: KONVERSI URL DRIVE =====
@@ -1544,6 +1789,11 @@ function pilihKelas(kodeKelas) {
     
     generateStudentCards();
     muatDataSiswa();
+    
+    // Load foto wali kelas
+    setTimeout(() => {
+        loadFotoWaliKelas();
+    }, 500); // Delay 500ms untuk memastikan DOM ready
 }
 
 function kembaliKeLanding() {
@@ -2401,6 +2651,151 @@ window.addEventListener('DOMContentLoaded', () => {
     createSpiralHoles();
     initLandingPage();
 });
+
+// Handle Upload Foto Wali Kelas
+
+let fotoWaliList = [];
+
+async function loadFotoWaliKelas() {
+    if (!currentKelas) return;
+    
+    console.log('🔄 Loading foto wali untuk kelas:', currentKelas.kode);
+    
+    try {
+        const response = await fetch(GOOGLE_SHEETS_API_URL + `?action=getFotoWali&kelas=${currentKelas.kode}`);
+        const result = await response.json();
+        
+        console.log(' Result:', result);
+        
+        if (result.status === 'success') {
+            fotoWaliList = result.data || [];
+            console.log('✅ Foto wali loaded:', fotoWaliList.length, 'foto');
+            renderFotoWaliGrid();
+        } else {
+            console.error('❌ Gagal load foto wali:', result.message);
+        }
+    } catch (error) {
+        console.error('❌ Error load foto wali:', error);
+    }
+}
+
+function renderFotoWaliGrid() {
+    const grid = document.getElementById('fotoWaliGrid');
+    if (!grid) return;
+    
+    grid.innerHTML = '';
+    
+    const maxFoto = Math.min(fotoWaliList.length, 2);
+    
+    // Render foto yang ada
+    for (let i = 0; i < maxFoto; i++) {
+        const fotoItem = document.createElement('div');
+        fotoItem.className = 'foto-item-final';
+        fotoItem.innerHTML = `
+            <img src="${fotoWaliList[i]}" alt="Foto Wali ${i + 1}" crossorigin="anonymous">
+            <button class="foto-delete-btn-final" onclick="deleteFotoWali(${i})" title="Hapus foto">
+                <i class="fa fa-times"></i>
+            </button>
+        `;
+        grid.appendChild(fotoItem);
+    }
+    
+    // Placeholder jika belum ada 2 foto
+    const remaining = 2 - maxFoto;
+    for (let i = 0; i < remaining; i++) {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'foto-placeholder-final';
+        placeholder.innerHTML = '<i class="fa fa-image" style="font-size:32px;color:rgba(212,175,55,0.3);margin-right:10px;"></i>Belum ada foto';
+        grid.appendChild(placeholder);
+    }
+}
+
+// Handle upload foto wali
+async function handleFotoWaliUpload(event) {
+    const files = event.target.files;
+    
+    console.log('📤 Upload foto wali:', files.length, 'file');
+    
+    if (files.length > 0 && currentKelas) {
+        for (let file of files) {
+            if (!file.type.startsWith('image/')) {
+                console.warn('⚠️ File bukan gambar:', file.name);
+                continue;
+            }
+            
+            try {
+                console.log(' Mengupload:', file.name);
+                
+                const base64 = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+                
+                const response = await fetch(GOOGLE_SHEETS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({
+                        action: 'uploadFotoWali',
+                        kelas: currentKelas.kode,
+                        filename: file.name,
+                        mimeType: file.type,
+                        base64: base64.split(',')[1]
+                    })
+                });
+                
+                const result = await response.json();
+                console.log('📥 Response:', result);
+                
+                if (result.status === 'success') {
+                    console.log('✅ Foto berhasil diupload:', result.url);
+                    fotoWaliList.push(result.url);
+                    renderFotoWaliGrid();
+                } else {
+                    alert('Gagal upload: ' + result.message);
+                }
+            } catch (error) {
+                console.error(' Error upload:', error);
+                alert('Terjadi kesalahan saat upload');
+            }
+        }
+    }
+    
+    event.target.value = '';
+}
+
+// Hapus foto wali
+async function deleteFotoWali(index) {
+    if (!confirm('Hapus foto ini?')) return;
+    
+    try {
+        const response = await fetch(GOOGLE_SHEETS_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({
+                action: 'deleteFotoWali',
+                kelas: currentKelas.kode,
+                index: index
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+            fotoWaliList.splice(index, 1);
+            renderFotoWaliGrid();
+        } else {
+            alert('Gagal hapus: ' + result.message);
+        }
+    } catch (error) {
+        console.error('❌ Error delete:', error);
+        alert('Terjadi kesalahan saat hapus');
+    }
+}
+
+
+
 </script>
 </body>
 </html>
